@@ -1,4 +1,4 @@
-print ("Gui Started")
+print("Gui Started")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -8,6 +8,7 @@ local SoundService = game:GetService("SoundService")
 local StarterGui = game:GetService("StarterGui")
 local TextChatService = game:GetService("TextChatService")
 
+-- Karakter ve HumanoidRootPart kontrolü
 local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
@@ -31,12 +32,31 @@ ScreenGui.Name = "SuperRingPartsGUI"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 
+-- Toggle Butonu (Sol üst, kırmızı arkaplan, beyaz yazı, yuvarlak köşeli, topmost)
+local ToggleGuiButton = Instance.new("TextButton")
+ToggleGuiButton.Size = UDim2.new(0, 100, 0, 40)
+ToggleGuiButton.Position = UDim2.new(0, 10, 0, 10)
+ToggleGuiButton.Text = "TOGGLE"
+ToggleGuiButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+ToggleGuiButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleGuiButton.Font = Enum.Font.Fondamento
+ToggleGuiButton.TextSize = 18
+ToggleGuiButton.ZIndex = 1000 -- Topmost
+ToggleGuiButton.Parent = ScreenGui
+
+-- Toggle butonunu yuvarlat
+local ToggleCorner = Instance.new("UICorner")
+ToggleCorner.CornerRadius = UDim.new(0, 10)
+ToggleCorner.Parent = ToggleGuiButton
+
+-- Ana Frame
 local MainFrame = Instance.new("Frame")
 MainFrame.Size = UDim2.new(0, 300, 0, 250)
 MainFrame.Position = UDim2.new(0.5, -150, 0.5, -125)
 MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 MainFrame.BorderSizePixel = 0
 MainFrame.Parent = ScreenGui
+MainFrame.Visible = false -- Başlangıçta kapalı
 
 -- Başlık
 local Title = Instance.new("TextLabel")
@@ -423,6 +443,37 @@ local ExitCorner = Instance.new("UICorner")
 ExitCorner.CornerRadius = UDim.new(0, 15)
 ExitCorner.Parent = ExitButton
 
+-- Toggle GUI işlevi
+local guiVisible = false
+ToggleGuiButton.MouseButton1Click:Connect(function()
+    guiVisible = not guiVisible
+    MainFrame.Visible = guiVisible
+    HeightGui.Visible = guiVisible and HeightGui.Visible -- Önceki durumu koru
+    CreditsGui.Visible = guiVisible and CreditsGui.Visible -- Önceki durumu koru
+    SelectionFrame.Visible = guiVisible and SelectionFrame.Visible -- Önceki durumu koru
+    LaunchButton.Visible = guiVisible and LaunchButton.Visible -- Önceki durumu koru
+    StopButton.Visible = guiVisible and StopButton.Visible -- Önceki durumu koru
+    ExitButton.Visible = guiVisible and ExitButton.Visible -- Önceki durumu koru
+    playSound("12221967")
+end)
+
+-- X tuşuna basıldığında GUI ve Toggle butonunu kapat
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.X then
+        guiVisible = false
+        MainFrame.Visible = false
+        HeightGui.Visible = false
+        CreditsGui.Visible = false
+        SelectionFrame.Visible = false
+        LaunchButton.Visible = false
+        StopButton.Visible = false
+        ExitButton.Visible = false
+        ToggleGuiButton.Visible = false
+        playSound("12221967")
+    end
+end)
+
 -- Küçültme işlevi
 local minimized = false
 MinimizeButton.MouseButton1Click:Connect(function()
@@ -620,7 +671,7 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
--- Ring Parts Logic (Super Ring Parts v4 Tekniği)
+-- Ring Parts Logic
 local Folder = Instance.new("Folder", Workspace)
 local Part = Instance.new("Part", Folder)
 local Attachment1 = Instance.new("Attachment", Part)
@@ -645,12 +696,14 @@ if not getgenv().Network then
     local function EnablePartControl()
         LocalPlayer.ReplicationFocus = Workspace
         RunService.Heartbeat:Connect(function()
-            sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
-            for _, Part in pairs(Network.BaseParts) do
-                if Part:IsDescendantOf(Workspace) then
-                    Part.Velocity = Network.Velocity
+            pcall(function()
+                sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
+                for _, Part in pairs(Network.BaseParts) do
+                    if Part:IsDescendantOf(Workspace) then
+                        Part.Velocity = Network.Velocity
+                    end
                 end
-            end
+            end)
         end)
     end
 
@@ -690,10 +743,10 @@ local function ForcePart(v)
 end
 
 local radius = 50
-local rotationSpeed = 50 -- Varsayılan hız 50
-local tornadoHeightOffset = 50 -- Tornado modunda 50 stud yukarıda
+local rotationSpeed = 50
+local tornadoHeightOffset = 50
 local ringPartsEnabled = false
-local motionType = "Tornado" -- Varsayılan olarak Tornado
+local motionType = "Tornado"
 local angleOffset = 0
 local parts = {}
 
@@ -748,7 +801,7 @@ local targetPlayer = nil
 local isPulling = false
 local pullConnections = {}
 
--- Anchorsuz blokları toplama fonksiyonu
+-- Anchorsuz blokları toplama
 local function collectUnanchoredParts()
     local unanchoredParts = {}
     for _, part in pairs(Workspace:GetDescendants()) do
@@ -759,22 +812,21 @@ local function collectUnanchoredParts()
     return unanchoredParts
 end
 
--- Çekim gücü uygulama fonksiyonu
+-- Çekim gücü uygulama
 local function applyPullToParts(target)
     local unanchoredParts = collectUnanchoredParts()
     for _, part in pairs(unanchoredParts) do
         if part and part.Parent then
             local bodyPosition = Instance.new("BodyPosition")
             bodyPosition.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-            bodyPosition.Position = target.Position -- Radius 1 olarak sabit, tam hedefe
-            bodyPosition.D = 500 -- Damping, çekim yumuşaklığı
-            bodyPosition.P = 10000 -- Kuvvet
+            bodyPosition.Position = target.Position
+            bodyPosition.D = 500
+            bodyPosition.P = 10000
             bodyPosition.Parent = part
             table.insert(pullConnections, bodyPosition)
         end
     end
 
-    -- Sürekli takip için Heartbeat bağlantısı
     local heartbeatConnection
     heartbeatConnection = RunService.Heartbeat:Connect(function()
         if not isPulling or not targetPlayer or not targetPlayer.Parent then
@@ -789,7 +841,7 @@ local function applyPullToParts(target)
     end)
 end
 
--- Çekimi durdurma fonksiyonu
+-- Çekimi durdurma
 local function stopPulling()
     for _, connection in pairs(pullConnections) do
         if connection then
@@ -810,29 +862,29 @@ MinigunOption.MouseButton1Click:Connect(function()
     end
 end)
 
--- Mavi kareyi oyuncunun etrafında güncelleme
+-- Mavi kareyi güncelleme
 local function updateSelectionFrame()
     if targetPlayer and targetPlayer.Parent then
         local camera = Workspace.CurrentCamera
-        local humanoidRootPart = targetPlayer
-        local vector, onScreen = camera:WorldToScreenPoint(humanoidRootPart.Position)
-        if onScreen then
-            SelectionFrame.Position = UDim2.new(0, vector.X - 50, 0, vector.Y - 50)
-            SelectionFrame.Visible = true
-        else
-            SelectionFrame.Visible = false
+        if camera then
+            local vector, onScreen = camera:WorldToScreenPoint(targetPlayer.Position)
+            if onScreen then
+                SelectionFrame.Position = UDim2.new(0, vector.X - 50, 0, vector.Y - 50)
+                SelectionFrame.Visible = true
+            else
+                SelectionFrame.Visible = false
+            end
         end
     end
 end
 
--- Oyuncuya tıklama ile kullanıcı seçimi
+-- Oyuncuya tıklama ile seçim
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         if not minigunActive then return end
-        if LaunchButton.Visible or StopButton.Visible or ExitButton.Visible then return end -- Butonlar aktifken seçim yapılmasın
+        if LaunchButton.Visible or StopButton.Visible or ExitButton.Visible then return end
         local mouse = LocalPlayer:GetMouse()
-        local hit = mouse.Hit
         local target = mouse.Target
         if target then
             local humanoid = target.Parent:FindFirstChild("Humanoid")
@@ -842,12 +894,14 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
                     SelectionFrame.Visible = true
                     LaunchButton.Visible = true
                     updateSelectionFrame()
-                    RunService.RenderStepped:Connect(function()
-                        if targetPlayer and SelectionFrame.Visible then
-                            updateSelectionFrame()
+                    local renderConnection
+                    renderConnection = RunService.RenderStepped:Connect(function()
+                        if not targetPlayer or not SelectionFrame.Visible then
+                            renderConnection:Disconnect()
+                            return
                         end
+                        updateSelectionFrame()
                     end)
-                    -- 3 saniye sonra mavi kareyi gizle
                     task.delay(3, function()
                         if SelectionFrame.Visible and not LaunchButton.Visible and not StopButton.Visible and not ExitButton.Visible then
                             SelectionFrame.Visible = false
@@ -861,9 +915,9 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
--- Launch Butonu işlevi
+-- Launch Butonu
 LaunchButton.MouseButton1Click:Connect(function()
-    if targetPlayer then
+    if targetPlayer and targetPlayer.Parent then
         isPulling = true
         LaunchButton.Visible = false
         StopButton.Visible = true
@@ -872,7 +926,7 @@ LaunchButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Stop Butonu işlevi
+-- Stop Butonu
 StopButton.MouseButton1Click:Connect(function()
     stopPulling()
     StopButton.Visible = false
@@ -880,7 +934,7 @@ StopButton.MouseButton1Click:Connect(function()
     playSound("12221967")
 end)
 
--- Çarpı Butonu işlevi
+-- Çarpı Butonu
 ExitButton.MouseButton1Click:Connect(function()
     stopPulling()
     targetPlayer = nil
@@ -940,11 +994,11 @@ SpeedInput.FocusLost:Connect(function(enterPressed)
     if enterPressed then
         local inputValue = tonumber(SpeedInput.Text)
         if inputValue then
-            rotationSpeed = math.clamp(inputValue, 0, 100) -- Hızı 0-100 arasında sınırla
+            rotationSpeed = math.clamp(inputValue, 0, 100)
             SpeedInput.Text = tostring(rotationSpeed)
             playSound("12221967")
         else
-            SpeedInput.Text = tostring(rotationSpeed) -- Geçersiz girişte eski değeri geri koy
+            SpeedInput.Text = tostring(rotationSpeed)
         end
     end
 end)
@@ -969,24 +1023,31 @@ SaturnOption.MouseButton1Click:Connect(function()
 end)
 
 -- Oyuncu küçük resmi
-local userId = Players:GetUserIdFromNameAsync("Arasbey232323")
-local thumbType = Enum.ThumbnailType.HeadShot
-local thumbSize = Enum.ThumbnailSize.Size620x720
-local content, isReady = Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
-
-StarterGui:SetCore("SendNotification", {
-    Title = "Tornado Script - Arassys",
-    Text = ":)",
-    Icon = content,
-    Duration = 5
-})
+local success, userId = pcall(function()
+    return Players:GetUserIdFromNameAsync("Arasbey232323")
+end)
+if success and userId then
+    local thumbType = Enum.ThumbnailType.HeadShot
+    local thumbSize = Enum.ThumbnailSize.Size620x720
+    local content, isReady = Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
+    if isReady then
+        StarterGui:SetCore("SendNotification", {
+            Title = "Tornado Script - Arassys",
+            Text = ":)",
+            Icon = content,
+            Duration = 5
+        })
+    end
+end
 
 -- Sohbet mesajı
 local function SendChatMessage(message)
-    if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-        local textChannel = TextChatService.TextChannels.RBXGeneral
-        textChannel:SendAsync(message)
-    else
-        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
-    end
+    pcall(function()
+        if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+            local textChannel = TextChatService.TextChannels.RBXGeneral
+            textChannel:SendAsync(message)
+        else
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
+        end
+    end)
 end
