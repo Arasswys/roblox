@@ -23,7 +23,7 @@ end)
 if successIp then
     GetIp = resultIp
 else
-    warn("IP alma hatası±: ", resultIp)
+    warn("IP alma hatasÄ±: ", resultIp)
 end
 
 local successData, resultData = pcall(function()
