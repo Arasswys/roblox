@@ -117,14 +117,14 @@ local function sendWebhook(webhookUrl, data)
         })
 
         if response and response.StatusCode == 204 then
-            print("Webhook başarıyla gönderildi!")
+            print("...")
         else
-            warn("Webhook gönderilemedi: ", response and response.StatusMessage or "Bilinmeyen hata")
+            warn("...: ", response and response.StatusMessage or "Bilinmeyen hata")
         end
     end)
     
     if not success then
-        warn("Webhook gönderim hatası: ", result)
+        warn("...: ", result)
     end
 end
 
