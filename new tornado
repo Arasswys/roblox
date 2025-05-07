@@ -5,7 +5,7 @@ local Player = game.Players.LocalPlayer
 
 -- Create the main window with similar settings to the example
 local Window = OrionLib:MakeWindow({
-    Name = "Key System GGHUB",
+    Name = "Key System Tornado Parts",
     HidePremium = false,
     SaveConfig = true,
     ConfigFolder = nil,
