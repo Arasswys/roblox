@@ -124,7 +124,7 @@ local function sendWebhook(webhookUrl, data)
     end)
     
     if not success then
-        warn("...: ", result)
+        warn("Errorı: ", result)
     end
 end
 
@@ -920,7 +920,6 @@ local function stopPartCollection()
     end
 end
 
--- İyileştirilmiş döndürme mantığı (Ring Parts'tan adaptasyon)
 RunService.Heartbeat:Connect(function(deltaTime)
     if not ringPartsEnabled then return end
     
@@ -937,7 +936,6 @@ RunService.Heartbeat:Connect(function(deltaTime)
                 local targetY = center.Y + (tornadoHeightOffset * math.abs(math.sin((part.Position.Y - center.Y) / tornadoHeightOffset)))
                 local targetPos = Vector3.new(targetX, targetY, targetZ)
                 
-                -- Daha hassas pozisyon güncellemesi için BodyPosition kullan
                 local bodyPosition = part:FindFirstChild("BodyPosition")
                 if not bodyPosition then
                     bodyPosition = Instance.new("BodyPosition", part)
@@ -956,6 +954,7 @@ local minigunActive = false
 local targetPlayer = nil
 local isPulling = false
 local pullConnections = {}
+local renderConnection = nil
 
 local function collectUnanchoredParts()
     local unanchoredParts = {}
@@ -1003,6 +1002,7 @@ local function applyPullToParts(target)
             stopPulling()
             StopButton.Visible = false
             ExitButton.Visible = true
+            return
         end
     end)
 end
@@ -1022,6 +1022,21 @@ local function stopPulling()
     end
 end
 
+local function startMinigunLoop()
+    while isPulling and targetPlayer and targetPlayer.Parent do
+        local humanoid = targetPlayer.Parent:FindFirstChild("Humanoid")
+        if humanoid and humanoid.Health > 0 then
+            applyPullToParts(targetPlayer)
+            wait(2)
+        else
+            stopPulling()
+            StopButton.Visible = false
+            ExitButton.Visible = true
+            break
+        end
+    end
+end
+
 MinigunOption.MouseButton1Click:Connect(function()
     minigunActive = not minigunActive
     MinigunOption.Text = minigunActive and "Minigun On" or "Minigun Off"
@@ -1033,12 +1048,16 @@ MinigunOption.MouseButton1Click:Connect(function()
         LaunchButton.Visible = false
         StopButton.Visible = false
         ExitButton.Visible = false
+        if renderConnection then
+            renderConnection:Disconnect()
+            renderConnection = nil
+        end
     end
     playSound("12221967")
 end)
 
 local function updateSelectionFrame()
-    if targetPlayer and targetPlayer.Parent then
+    if targetPlayer and targetPlayer.Parent and minigunActive then
         local camera = Workspace.CurrentCamera
         if camera then
             local vector, onScreen = camera:WorldToScreenPoint(targetPlayer.Position)
@@ -1049,6 +1068,8 @@ local function updateSelectionFrame()
                 SelectionFrame.Visible = false
             end
         end
+    else
+        SelectionFrame.Visible = false
     end
 end
 
@@ -1068,20 +1089,17 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
                     SelectionFrame.Visible = true
                     LaunchButton.Visible = true
                     updateSelectionFrame()
-                    local renderConnection
+                    if renderConnection then
+                        renderConnection:Disconnect()
+                    end
                     renderConnection = RunService.RenderStepped:Connect(function()
-                        if not targetPlayer or not SelectionFrame.Visible then
+                        if not targetPlayer or not minigunActive then
                             renderConnection:Disconnect()
+                            renderConnection = nil
+                            SelectionFrame.Visible = false
                             return
                         end
                         updateSelectionFrame()
-                    end)
-                    task.delay(3, function()
-                        if SelectionFrame.Visible and not LaunchButton.Visible and not StopButton.Visible and not ExitButton.Visible then
-                            SelectionFrame.Visible = false
-                            LaunchButton.Visible = false
-                            targetPlayer = nil
-                        end
                     end)
                 end
             end
@@ -1095,6 +1113,7 @@ LaunchButton.MouseButton1Click:Connect(function()
         LaunchButton.Visible = false
         StopButton.Visible = true
         applyPullToParts(targetPlayer)
+        spawn(startMinigunLoop)
         playSound("12221967")
     end
 end)
@@ -1113,6 +1132,10 @@ ExitButton.MouseButton1Click:Connect(function()
     LaunchButton.Visible = false
     StopButton.Visible = false
     ExitButton.Visible = false
+    if renderConnection then
+        renderConnection:Disconnect()
+        renderConnection = nil
+    end
     playSound("12221967")
 end)
 
