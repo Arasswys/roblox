@@ -370,7 +370,7 @@ SpeedInput.Parent = ScrollingFrame
 
 local CreditsOption = Instance.new("TextButton")
 CreditsOption.Size = UDim2.new(1, 0, 0, 40)
-CreditsOption.Position = UDim2.new(0, 0, 0, 80) -- Dinamik olarak güncellenecek
+CreditsOption.Position = UDim2.new(0, 0, 0, 80)
 CreditsOption.Text = "Credits"
 CreditsOption.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
 CreditsOption.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -380,7 +380,7 @@ CreditsOption.Parent = ScrollingFrame
 
 local UpDownOption = Instance.new("TextButton")
 UpDownOption.Size = UDim2.new(1, 0, 0, 40)
-UpDownOption.Position = UDim2.new(0, 0, 0, 120) -- Dinamik olarak güncellenecek
+UpDownOption.Position = UDim2.new(0, 0, 0, 120)
 UpDownOption.Text = "Up, Down"
 UpDownOption.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
 UpDownOption.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -390,7 +390,7 @@ UpDownOption.Parent = ScrollingFrame
 
 local MinigunOption = Instance.new("TextButton")
 MinigunOption.Size = UDim2.new(1, 0, 0, 40)
-MinigunOption.Position = UDim2.new(0, 0, 0, 160) -- Dinamik olarak güncellenecek
+MinigunOption.Position = UDim2.new(0, 0, 0, 160)
 MinigunOption.Text = "Minigun Off"
 MinigunOption.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 MinigunOption.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -429,7 +429,7 @@ local function updateLayout()
     currentY = currentY + MinigunOption.Size.Y.Offset
 
     -- CanvasSize'ı güncelle
-    ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, currentY + 10) -- 10 piksel boşluk
+    ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, currentY + 10)
 end
 
 -- İlk layout güncellemesi
@@ -1048,7 +1048,7 @@ local function applyPullToParts(target)
             local bodyPosition = Instance.new("BodyPosition")
             bodyPosition.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
             bodyPosition.D = 500
-            bodyPosition.P = 10000
+            bodyPosition.P = 10000 -- Çekim gücünü orijinal değere (10000) geri döndürdük
             bodyPosition.Parent = part
             table.insert(pullConnections, bodyPosition)
         end
@@ -1062,6 +1062,7 @@ local function applyPullToParts(target)
         end
         local humanoid = targetPlayer.Parent:FindFirstChild("Humanoid")
         if humanoid and humanoid.Health > 0 then
+            -- Canlı takip: Hedef oyuncunun güncel pozisyonuna göre BodyPosition.Position'ı güncelle
             for _, bodyPosition in pairs(pullConnections) do
                 if bodyPosition and bodyPosition.Parent then
                     bodyPosition.Position = targetPlayer.Position
@@ -1069,7 +1070,7 @@ local function applyPullToParts(target)
             end
             for _, part in pairs(unanchoredParts) do
                 if part and part.Parent then
-                    part.Velocity = (targetPlayer.Position - part.Position).Unit * 50
+                    part.Velocity = (targetPlayer.Position - part.Position).Unit * 50 -- Hızı 50'ye indirdik
                     part.CanCollide = true
                 end
             end
