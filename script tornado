@@ -173,7 +173,7 @@ ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 -- Toggle Butonu (Sol üst, kırmızı arkaplan, beyaz yazı, yuvarlak köşeli, topmost)
 local ToggleGuiButton = Instance.new("TextButton")
 ToggleGuiButton.Size = UDim2.new(0, 100, 0, 40)
-ToggleGuiButton.Position = UDim2.new(0, 10, 0, 10)
+ToggleGuiButton.Position = UDim2.new(0, 10, 0, 10) -- Sol üst köşeye geri taşındı
 ToggleGuiButton.Text = "TOGGLE"
 ToggleGuiButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 ToggleGuiButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -319,7 +319,7 @@ ArrowCorner.CornerRadius = UDim.new(0, 15)
 ArrowCorner.Parent = ArrowButton
 
 -- Açılır Menü Çerçevesi
-local DropdonFrame = Instance.new("Frame")
+local DropdownFrame = Instance.new("Frame")
 DropdownFrame.Size = UDim2.new(0, 150, 0, 200)
 DropdownFrame.Position = UDim2.new(0.5, -75, 1, -200)
 DropdownFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
@@ -574,7 +574,9 @@ ExitCorner.Parent = ExitButton
 local guiVisible = false
 ToggleGuiButton.MouseButton1Click:Connect(function()
     guiVisible = not guiVisible
+    print("ToggleGuiButton clicked, guiVisible:", guiVisible) -- Hata ayıklama için
     MainFrame.Visible = guiVisible
+    -- Diğer GUI elemanlarının görünürlüğünü yalnızca kendi durumlarına göre güncelle
     HeightGui.Visible = guiVisible and HeightGui.Visible
     CreditsGui.Visible = guiVisible and CreditsGui.Visible
     SelectionFrame.Visible = guiVisible and SelectionFrame.Visible
