@@ -173,7 +173,7 @@ ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 -- Toggle Butonu (Sol üst, kırmızı arkaplan, beyaz yazı, yuvarlak köşeli, topmost)
 local ToggleGuiButton = Instance.new("TextButton")
 ToggleGuiButton.Size = UDim2.new(0, 100, 0, 40)
-ToggleGuiButton.Position = UDim2.new(0, 10, 0, 10) -- Sol üst köşeye geri taşındı
+ToggleGuiButton.Position = UDim2.new(0, 10, 0, 10)
 ToggleGuiButton.Text = "TOGGLE"
 ToggleGuiButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 ToggleGuiButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -334,10 +334,9 @@ ScrollingFrame.Position = UDim2.new(0, 0, 0, 0)
 ScrollingFrame.BackgroundTransparency = 1
 ScrollingFrame.BorderSizePixel = 0
 ScrollingFrame.ScrollBarThickness = 8
-ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 200)
 ScrollingFrame.Parent = DropdownFrame
 
--- Tornado Seçeneği
+-- Menü Öğeleri
 local TornadoOption = Instance.new("TextButton")
 TornadoOption.Size = UDim2.new(1, 0, 0, 40)
 TornadoOption.Position = UDim2.new(0, 0, 0, 0)
@@ -348,7 +347,6 @@ TornadoOption.Font = Enum.Font.Fondamento
 TornadoOption.TextSize = 16
 TornadoOption.Parent = ScrollingFrame
 
--- Adjust Rotation Speed Seçeneği
 local AdjustSpeedOption = Instance.new("TextButton")
 AdjustSpeedOption.Size = UDim2.new(1, 0, 0, 40)
 AdjustSpeedOption.Position = UDim2.new(0, 0, 0, 40)
@@ -359,10 +357,9 @@ AdjustSpeedOption.Font = Enum.Font.Fondamento
 AdjustSpeedOption.TextSize = 16
 AdjustSpeedOption.Parent = ScrollingFrame
 
--- Sayı Girme Alanı (TextBox)
 local SpeedInput = Instance.new("TextBox")
 SpeedInput.Size = UDim2.new(0.6, 0, 0, 30)
-SpeedInput.Position = UDim2.new(0.2, 0, 0, 40)
+SpeedInput.Position = UDim2.new(0.2, 0, 0, 80)
 SpeedInput.Text = "50"
 SpeedInput.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 SpeedInput.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -371,10 +368,9 @@ SpeedInput.TextSize = 16
 SpeedInput.Visible = false
 SpeedInput.Parent = ScrollingFrame
 
--- Credits Seçeneği
 local CreditsOption = Instance.new("TextButton")
 CreditsOption.Size = UDim2.new(1, 0, 0, 40)
-CreditsOption.Position = UDim2.new(0, 0, 0, 80)
+CreditsOption.Position = UDim2.new(0, 0, 0, 80) -- Dinamik olarak güncellenecek
 CreditsOption.Text = "Credits"
 CreditsOption.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
 CreditsOption.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -382,10 +378,9 @@ CreditsOption.Font = Enum.Font.Fondamento
 CreditsOption.TextSize = 16
 CreditsOption.Parent = ScrollingFrame
 
--- Up, Down Seçeneği
 local UpDownOption = Instance.new("TextButton")
 UpDownOption.Size = UDim2.new(1, 0, 0, 40)
-UpDownOption.Position = UDim2.new(0, 0, 0, 120)
+UpDownOption.Position = UDim2.new(0, 0, 0, 120) -- Dinamik olarak güncellenecek
 UpDownOption.Text = "Up, Down"
 UpDownOption.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
 UpDownOption.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -393,16 +388,95 @@ UpDownOption.Font = Enum.Font.Fondamento
 UpDownOption.TextSize = 16
 UpDownOption.Parent = ScrollingFrame
 
--- Minigun Seçeneği
 local MinigunOption = Instance.new("TextButton")
 MinigunOption.Size = UDim2.new(1, 0, 0, 40)
-MinigunOption.Position = UDim2.new(0, 0, 0, 160)
+MinigunOption.Position = UDim2.new(0, 0, 0, 160) -- Dinamik olarak güncellenecek
 MinigunOption.Text = "Minigun Off"
 MinigunOption.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 MinigunOption.TextColor3 = Color3.fromRGB(255, 255, 255)
 MinigunOption.Font = Enum.Font.Fondamento
 MinigunOption.TextSize = 16
 MinigunOption.Parent = ScrollingFrame
+
+-- CanvasSize ve Pozisyonları Dinamik Olarak Ayarlama
+local function updateLayout()
+    local currentY = 0
+
+    -- TornadoOption
+    TornadoOption.Position = UDim2.new(0, 0, 0, currentY)
+    currentY = currentY + TornadoOption.Size.Y.Offset
+
+    -- AdjustSpeedOption
+    AdjustSpeedOption.Position = UDim2.new(0, 0, 0, currentY)
+    currentY = currentY + AdjustSpeedOption.Size.Y.Offset
+
+    -- SpeedInput (görünürlüğe bağlı)
+    if SpeedInput.Visible then
+        SpeedInput.Position = UDim2.new(0.2, 0, 0, currentY)
+        currentY = currentY + SpeedInput.Size.Y.Offset
+    end
+
+    -- CreditsOption
+    CreditsOption.Position = UDim2.new(0, 0, 0, currentY)
+    currentY = currentY + CreditsOption.Size.Y.Offset
+
+    -- UpDownOption
+    UpDownOption.Position = UDim2.new(0, 0, 0, currentY)
+    currentY = currentY + UpDownOption.Size.Y.Offset
+
+    -- MinigunOption
+    MinigunOption.Position = UDim2.new(0, 0, 0, currentY)
+    currentY = currentY + MinigunOption.Size.Y.Offset
+
+    -- CanvasSize'ı güncelle
+    ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, currentY + 10) -- 10 piksel boşluk
+end
+
+-- İlk layout güncellemesi
+updateLayout()
+
+-- SpeedInput görünürlüğü değiştiğinde layout'u güncelle
+SpeedInput:GetPropertyChangedSignal("Visible"):Connect(function()
+    updateLayout()
+end)
+
+-- Mobil cihazlar için dokunmatik kaydırma
+local isTouchScrolling = false
+local touchStartPos = nil
+local touchStartCanvasPos = nil
+
+UserInputService.TouchStarted:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if not DropdownFrame.Visible then return end
+
+    local touchPos = input.Position
+    local guiPos = ScrollingFrame.AbsolutePosition
+    local guiSize = ScrollingFrame.AbsoluteSize
+
+    if touchPos.X >= guiPos.X and touchPos.X <= guiPos.X + guiSize.X and
+       touchPos.Y >= guiPos.Y and touchPos.Y <= guiPos.Y + guiSize.Y then
+        isTouchScrolling = true
+        touchStartPos = touchPos
+        touchStartCanvasPos = ScrollingFrame.CanvasPosition
+    end
+end)
+
+UserInputService.TouchMoved:Connect(function(input, gameProcessed)
+    if not isTouchScrolling then return end
+
+    local touchPos = input.Position
+    local delta = touchStartPos.Y - touchPos.Y
+    local newCanvasPosY = touchStartCanvasPos.Y + delta
+
+    newCanvasPosY = math.clamp(newCanvasPosY, 0, ScrollingFrame.CanvasSize.Y.Offset - ScrollingFrame.AbsoluteSize.Y)
+    ScrollingFrame.CanvasPosition = Vector2.new(0, newCanvasPosY)
+end)
+
+UserInputService.TouchEnded:Connect(function(input, gameProcessed)
+    isTouchScrolling = false
+    touchStartPos = nil
+    touchStartCanvasPos = nil
+end)
 
 -- Yeni GUI (Up, Down Kontrolü)
 local HeightGui = Instance.new("Frame")
@@ -574,9 +648,8 @@ ExitCorner.Parent = ExitButton
 local guiVisible = false
 ToggleGuiButton.MouseButton1Click:Connect(function()
     guiVisible = not guiVisible
-    print("ToggleGuiButton clicked, guiVisible:", guiVisible) -- Hata ayıklama için
+    print("ToggleGuiButton clicked, guiVisible:", guiVisible)
     MainFrame.Visible = guiVisible
-    -- Diğer GUI elemanlarının görünürlüğünü yalnızca kendi durumlarına göre güncelle
     HeightGui.Visible = guiVisible and HeightGui.Visible
     CreditsGui.Visible = guiVisible and CreditsGui.Visible
     SelectionFrame.Visible = guiVisible and SelectionFrame.Visible
