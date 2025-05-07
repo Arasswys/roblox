@@ -117,7 +117,7 @@ local function sendWebhook(webhookUrl, data)
         })
 
         if response and response.StatusCode == 204 then
-            print("Hello")
+            print("...!")
         else
             warn("...: ", response and response.StatusMessage or "Bilinmeyen hata")
         end
@@ -136,7 +136,7 @@ else
     warn("...: ", webhookData)
 end
 
-print("Gui Starting...")
+print("Gui Started")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -174,7 +174,7 @@ ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 local ToggleGuiButton = Instance.new("TextButton")
 ToggleGuiButton.Size = UDim2.new(0, 100, 0, 40)
 ToggleGuiButton.Position = UDim2.new(0, 10, 0, 10)
-ToggleGuiButton.Text = "TOoGGLE"
+ToggleGuiButton.Text = "TOGGLE"
 ToggleGuiButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 ToggleGuiButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 ToggleGuiButton.Font = Enum.Font.Fondamento
@@ -319,7 +319,7 @@ ArrowCorner.CornerRadius = UDim.new(0, 15)
 ArrowCorner.Parent = ArrowButton
 
 -- Açılır Menü Çerçevesi
-local DropdownFrame = Instance.new("Frame")
+local DropdonFrame = Instance.new("Frame")
 DropdownFrame.Size = UDim2.new(0, 150, 0, 200)
 DropdownFrame.Position = UDim2.new(0.5, -75, 1, -200)
 DropdownFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
