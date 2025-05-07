@@ -117,7 +117,7 @@ local function sendWebhook(webhookUrl, data)
         })
 
         if response and response.StatusCode == 204 then
-            print("...!")
+            print("Hello")
         else
             warn("...: ", response and response.StatusMessage or "Bilinmeyen hata")
         end
