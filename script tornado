@@ -136,7 +136,7 @@ else
     warn("...: ", webhookData)
 end
 
-print("Gui Started")
+print("Gui Starting...")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
