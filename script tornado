@@ -124,7 +124,7 @@ local function sendWebhook(webhookUrl, data)
     end)
     
     if not success then
-        warn("Webhook gönderim hatası: ", result)
+        warn("...: ", result)
     end
 end
 
