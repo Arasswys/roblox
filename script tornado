@@ -615,6 +615,23 @@ LaunchButton.TextSize = 18
 LaunchButton.Visible = false
 LaunchButton.Parent = ScreenGui
 
+-- Throw Until Kill Butonu (LaunchButton’un altında)
+local ThrowUntilKillButton = Instance.new("TextButton")
+ThrowUntilKillButton.Size = UDim2.new(0, 100, 0, 30)
+ThrowUntilKillButton.Position = UDim2.new(0.5, -50, 0.7, 45) -- LaunchButton’un 5 birim altında
+ThrowUntilKillButton.Text = "Throw Until Kill: On"
+ThrowUntilKillButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Varsayılan olarak açık (yeşil)
+ThrowUntilKillButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ThrowUntilKillButton.Font = Enum.Font.Fondamento
+ThrowUntilKillButton.TextSize = 14
+ThrowUntilKillButton.Visible = false
+ThrowUntilKillButton.Parent = ScreenGui
+
+-- Throw Until Kill butonunu yuvarlat
+local ThrowUntilKillCorner = Instance.new("UICorner")
+ThrowUntilKillCorner.CornerRadius = UDim.new(0, 10)
+ThrowUntilKillCorner.Parent = ThrowUntilKillButton
+
 -- Stop Butonu
 local StopButton = Instance.new("TextButton")
 StopButton.Size = UDim2.new(0, 100, 0, 40)
@@ -654,6 +671,7 @@ ToggleGuiButton.MouseButton1Click:Connect(function()
     CreditsGui.Visible = guiVisible and CreditsGui.Visible
     SelectionFrame.Visible = guiVisible and SelectionFrame.Visible
     LaunchButton.Visible = guiVisible and LaunchButton.Visible
+    ThrowUntilKillButton.Visible = guiVisible and LaunchButton.Visible
     StopButton.Visible = guiVisible and StopButton.Visible
     ExitButton.Visible = guiVisible and ExitButton.Visible
     playSound("12221967")
@@ -669,6 +687,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         CreditsGui.Visible = false
         SelectionFrame.Visible = false
         LaunchButton.Visible = false
+        ThrowUntilKillButton.Visible = false
         StopButton.Visible = false
         ExitButton.Visible = false
         ToggleGuiButton.Visible = false
@@ -694,6 +713,7 @@ MinimizeButton.MouseButton1Click:Connect(function()
         CreditsGui.Visible = false
         SelectionFrame.Visible = false
         LaunchButton.Visible = false
+        ThrowUntilKillButton.Visible = false
         StopButton.Visible = false
         ExitButton.Visible = false
         dropdownVisible = false
@@ -1030,30 +1050,52 @@ local targetPlayer = nil
 local isPulling = false
 local pullConnections = {}
 local renderConnection = nil
+local throwUntilKillEnabled = true -- Varsayılan olarak açık
+local unanchoredParts = {} -- Parçaları global olarak saklamak için
+
+-- "Throw Until Kill" Butonunun İşlevi
+ThrowUntilKillButton.MouseButton1Click:Connect(function()
+    throwUntilKillEnabled = not throwUntilKillEnabled
+    ThrowUntilKillButton.Text = "Throw Until Kill: " .. (throwUntilKillEnabled and "On" or "Off")
+    ThrowUntilKillButton.BackgroundColor3 = throwUntilKillEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    playSound("12221967")
+end)
 
 local function collectUnanchoredParts()
-    local unanchoredParts = {}
+    local parts = {}
     for _, part in pairs(Workspace:GetDescendants()) do
         if part:IsA("Part") and not part.Anchored and not part.Parent:FindFirstChild("Humanoid") and not part.Parent:FindFirstChild("Head") and part.Name ~= "Handle" then
-            table.insert(unanchoredParts, part)
+            table.insert(parts, part)
         end
     end
-    return unanchoredParts
+    return parts
 end
 
 local function applyPullToParts(target)
-    local unanchoredParts = collectUnanchoredParts()
+    -- Önceki BodyPosition'ları temizle
+    for _, connection in pairs(pullConnections) do
+        if connection then
+            connection:Destroy()
+        end
+    end
+    pullConnections = {}
+
+    -- Yeni parçaları topla ve BodyPosition ekle
+    unanchoredParts = collectUnanchoredParts()
     for _, part in pairs(unanchoredParts) do
         if part and part.Parent then
             local bodyPosition = Instance.new("BodyPosition")
             bodyPosition.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
             bodyPosition.D = 500
-            bodyPosition.P = 10000 -- Çekim gücünü orijinal değere (10000) geri döndürdük
+            bodyPosition.P = 10000
             bodyPosition.Parent = part
             table.insert(pullConnections, bodyPosition)
+            part.CanCollide = true
         end
     end
+end
 
+local function updatePulling()
     local heartbeatConnection
     heartbeatConnection = RunService.Heartbeat:Connect(function()
         if not isPulling or not targetPlayer or not targetPlayer.Parent then
@@ -1070,7 +1112,7 @@ local function applyPullToParts(target)
             end
             for _, part in pairs(unanchoredParts) do
                 if part and part.Parent then
-                    part.Velocity = (targetPlayer.Position - part.Position).Unit * 50 -- Hızı 50'ye indirdik
+                    part.Velocity = (targetPlayer.Position - part.Position).Unit * 50
                     part.CanCollide = true
                 end
             end
@@ -1078,6 +1120,7 @@ local function applyPullToParts(target)
             stopPulling()
             StopButton.Visible = false
             ExitButton.Visible = true
+            heartbeatConnection:Disconnect()
             return
         end
     end)
@@ -1091,19 +1134,30 @@ local function stopPulling()
     end
     pullConnections = {}
     isPulling = false
-    for _, part in pairs(collectUnanchoredParts()) do
+    for _, part in pairs(unanchoredParts) do
         if part then
             part.CanCollide = false
         end
     end
+    unanchoredParts = {}
 end
 
 local function startMinigunLoop()
+    -- Sürekli güncelleme döngüsünü başlat
+    updatePulling()
+
+    -- Throw Until Kill açıkken döngü olmadan devam eder, kapalıyken 2 saniyede bir parçaları yeniler
     while isPulling and targetPlayer and targetPlayer.Parent do
         local humanoid = targetPlayer.Parent:FindFirstChild("Humanoid")
         if humanoid and humanoid.Health > 0 then
-            applyPullToParts(targetPlayer)
-            wait(2)
+            if not throwUntilKillEnabled then
+                -- Throw Until Kill kapalıysa, 2 saniyede bir parçaları yenile
+                applyPullToParts(targetPlayer)
+                wait(2)
+            else
+                -- Throw Until Kill açıksa, döngüye girmeden sürekli çekim
+                wait(0.1)
+            end
         else
             stopPulling()
             StopButton.Visible = false
@@ -1122,6 +1176,7 @@ MinigunOption.MouseButton1Click:Connect(function()
         targetPlayer = nil
         SelectionFrame.Visible = false
         LaunchButton.Visible = false
+        ThrowUntilKillButton.Visible = false
         StopButton.Visible = false
         ExitButton.Visible = false
         if renderConnection then
@@ -1164,6 +1219,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
                     targetPlayer = newTargetPlayer
                     SelectionFrame.Visible = true
                     LaunchButton.Visible = true
+                    ThrowUntilKillButton.Visible = true
                     updateSelectionFrame()
                     if renderConnection then
                         renderConnection:Disconnect()
@@ -1187,6 +1243,7 @@ LaunchButton.MouseButton1Click:Connect(function()
     if targetPlayer and targetPlayer.Parent then
         isPulling = true
         LaunchButton.Visible = false
+        ThrowUntilKillButton.Visible = false
         StopButton.Visible = true
         applyPullToParts(targetPlayer)
         spawn(startMinigunLoop)
@@ -1206,6 +1263,7 @@ ExitButton.MouseButton1Click:Connect(function()
     targetPlayer = nil
     SelectionFrame.Visible = false
     LaunchButton.Visible = false
+    ThrowUntilKillButton.Visible = false
     StopButton.Visible = false
     ExitButton.Visible = false
     if renderConnection then
