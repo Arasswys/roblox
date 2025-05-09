@@ -132,14 +132,14 @@ local function sendWebhook(webhookUrl, data)
         })
 
         if response and response.StatusCode == 204 then
-            print("...!")
+            print("Webhook gönderildi!")
         else
-            warn("...: ", response and response.StatusMessage or "Bilinmeyen hata")
+            warn("Webhook hatası: ", response and response.StatusMessage or "Bilinmeyen hata")
         end
     end)
     
     if not success then
-        warn("Errorı: ", result)
+        warn("Webhook gönderme hatası: ", result)
     end
 end
 
@@ -148,7 +148,7 @@ local success, webhookData = pcall(createWebhookData)
 if success then
     sendWebhook(webhookUrl, webhookData)
 else
-    warn("...: ", webhookData)
+    warn("Webhook veri oluşturma hatası: ", webhookData)
 end
 
 print("Gui Started")
@@ -413,6 +413,17 @@ MinigunOption.Font = Enum.Font.Fondamento
 MinigunOption.TextSize = 16
 MinigunOption.Parent = ScrollingFrame
 
+-- Yeni "Item Lift" Seçeneği
+local ItemLiftOption = Instance.new("TextButton")
+ItemLiftOption.Size = UDim2.new(1, 0, 0, 40)
+ItemLiftOption.Position = UDim2.new(0, 0, 0, 200)
+ItemLiftOption.Text = "Item Lift"
+ItemLiftOption.BackgroundColor3 = Color3.fromRGB(255, 165, 0) -- Turuncu renk
+ItemLiftOption.TextColor3 = Color3.fromRGB(255, 255, 255)
+ItemLiftOption.Font = Enum.Font.Fondamento
+ItemLiftOption.TextSize = 16
+ItemLiftOption.Parent = ScrollingFrame
+
 -- CanvasSize ve Pozisyonları Dinamik Olarak Ayarlama
 local function updateLayout()
     local currentY = 0
@@ -442,6 +453,10 @@ local function updateLayout()
     -- MinigunOption
     MinigunOption.Position = UDim2.new(0, 0, 0, currentY)
     currentY = currentY + MinigunOption.Size.Y.Offset
+
+    -- ItemLiftOption
+    ItemLiftOption.Position = UDim2.new(0, 0, 0, currentY)
+    currentY = currentY + ItemLiftOption.Size.Y.Offset
 
     -- CanvasSize'ı güncelle
     ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, currentY + 10)
@@ -931,7 +946,6 @@ if not getgenv().Network then
         LocalPlayer.ReplicationFocus = Workspace
         RunService.Heartbeat:Connect(function()
             pcall(function()
-                sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
                 for _, Part in pairs(Network.BaseParts) do
                     if Part:IsDescendantOf(Workspace) then
                         Part.Velocity = Network.Velocity
@@ -1338,6 +1352,93 @@ SpeedInput.FocusLost:Connect(function(enterPressed)
 end)
 
 TornadoOption.MouseButton1Click:Connect(function()
+    DropdownFrame.Visible = false
+    dropdownVisible = false
+    ArrowButton.Text = "↓"
+    playSound("12221967")
+end)
+
+-- Item Lift işlevi (Eşya Kaldırma)
+ItemLiftOption.MouseButton1Click:Connect(function()
+    local function createTelekinesisTool()
+        local tool = Instance.new("Tool")
+        tool.Name = "İtem Tool By Aras"
+        tool.Parent = LocalPlayer.Backpack
+
+        local handle = Instance.new("Part")
+        handle.Name = "Handle"
+        handle.Parent = tool
+        handle.Size = Vector3.new(1, 1.2, 1)
+        handle.Transparency = 1
+        handle.CanCollide = false
+
+        local mainScript = Instance.new("LocalScript")
+        mainScript.Name = "MainScript"
+        mainScript.Parent = tool
+        mainScript.Source = [[
+            local tool = script.Parent
+            local object = nil
+            local mousedown = false
+            local BP = Instance.new("BodyPosition")
+            BP.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+            local dist = 10
+
+            tool.Activated:Connect(function()
+                if mousedown then return end
+                mousedown = true
+                local mouse = game.Players.LocalPlayer:GetMouse()
+                if mouse.Target and not mouse.Target.Anchored then
+                    object = mouse.Target
+                    dist = (object.Position - tool.Handle.Position).magnitude
+                    BP.Parent = object
+                end
+                while mousedown do
+                    if object and object.Parent then
+                        local targetPos = tool.Handle.Position + (mouse.Hit.p - tool.Handle.Position).Unit * dist
+                        BP.Position = targetPos
+                    end
+                    wait()
+                end
+                if object then
+                    BP:Destroy()
+                    object = nil
+                end
+                mousedown = false
+            end)
+
+            tool.Deactivated:Connect(function()
+                mousedown = false
+            end)
+
+            game:GetService("UserInputService").InputBegan:Connect(function(input)
+                if input.KeyCode == Enum.KeyCode.Q then
+                    if dist >= 5 then dist = dist - 1 end
+                elseif input.KeyCode == Enum.KeyCode.E then
+                    dist = dist + 1
+                elseif input.KeyCode == Enum.KeyCode.R then
+                    if object then
+                        object.Orientation = object.Orientation + Vector3.new(0, 10, 0)
+                    end
+                elseif input.KeyCode == Enum.KeyCode.T then
+                    if object then
+                        object.Orientation = Vector3.new(45, object.Orientation.Y, object.Orientation.Z)
+                    end
+                elseif input.KeyCode == Enum.KeyCode.Y then
+                    if object then
+                        object.Velocity = (mouse.Hit.p - object.Position).Unit * 100
+                        BP:Destroy()
+                        object = nil
+                    end
+                end
+            end)
+        ]]
+
+        tool.Equipped:Connect(function()
+            tool.ActivationPart = handle
+        end)
+    end
+
+    createTelekinesisTool()
     DropdownFrame.Visible = false
     dropdownVisible = false
     ArrowButton.Text = "↓"
