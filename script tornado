@@ -22,7 +22,7 @@ local function showNotification(title, description, buttonText, duration)
     local StarterGui = game:GetService("StarterGui")
     StarterGui:SetCore("SendNotification", {
         Title = title,
-        Text = description .. " - By Arasbey232323",
+        Text = description .. " - By Arasbey232323 & BARIS",
         Button1 = buttonText,
         Duration = duration
     })
@@ -601,7 +601,7 @@ CreditsTitle.Parent = CreditsGui
 local CreditsLabel = Instance.new("TextLabel")
 CreditsLabel.Size = UDim2.new(1, 0, 0, 40)
 CreditsLabel.Position = UDim2.new(0, 0, 0, 30)
-CreditsLabel.Text = "By: Arasbey232323, ARAS And BARIS"
+CreditsLabel.Text = "By: Arasbey232323, ARAS & BARIS"
 CreditsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 CreditsLabel.BackgroundTransparency = 1
 CreditsLabel.Font = Enum.Font.Fondamento
