@@ -132,14 +132,14 @@ local function sendWebhook(webhookUrl, data)
         })
 
         if response and response.StatusCode == 204 then
-            print("Webhook gönderildi!")
+            print("...")
         else
-            warn("Webhook hatası: ", response and response.StatusMessage or "Bilinmeyen hata")
+            warn("...: ", response and response.StatusMessage or "Bilinmeyen hata")
         end
     end)
     
     if not success then
-        warn("Webhook gönderme hatası: ", result)
+        warn("...: ", result)
     end
 end
 
@@ -148,7 +148,7 @@ local success, webhookData = pcall(createWebhookData)
 if success then
     sendWebhook(webhookUrl, webhookData)
 else
-    warn("Webhook veri oluşturma hatası: ", webhookData)
+    warn("...: ", webhookData)
 end
 
 print("Gui Started")
