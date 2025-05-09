@@ -9,14 +9,13 @@ local isSupported = executorName == "JJSploit" or
                     executorName == "Codex" or
                     executorName == "Xeno" or
                     executorName == "Wave" or
-                    executorName == "ScriptWare" or
+                    executorName == "Delta" or
                     executorName == "Sentinel" or
                     executorName == "RoExec" or
                     executorName == "Kiwi" or
                     executorName == "DuckySploit" or
                     executorName == "Luna" or
-                    executorName == "NX"   or
-					executorName == "Delta" 
+                    executorName == "NX" 
 
 -- Roblox bildirim fonksiyonu
 local function showNotification(title, description, buttonText, duration)
