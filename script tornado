@@ -22,7 +22,7 @@ local function showNotification(title, description, buttonText, duration)
     local StarterGui = game:GetService("StarterGui")
     StarterGui:SetCore("SendNotification", {
         Title = title,
-        Text = description .. " - By Arasbey232323 & BARIS",
+        Text = description .. " - By Arasbey232323",
         Button1 = buttonText,
         Duration = duration
     })
