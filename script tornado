@@ -209,7 +209,7 @@ MainFrame.Position = UDim2.new(0.5, -150, 0.5, -125)
 MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 MainFrame.BorderSizePixel = 0
 MainFrame.Parent = ScreenGui
-MainFrame.Visible = false
+MainFrame.Visible = true -- GUI başlangıçta açık olacak
 
 -- Başlık
 local Title = Instance.new("TextLabel")
@@ -692,7 +692,7 @@ ExitCorner.CornerRadius = UDim.new(0, 15)
 ExitCorner.Parent = ExitButton
 
 -- Toggle GUI işlevi
-local guiVisible = false
+local guiVisible = true -- GUI başlangıçta açık olacak
 ToggleGuiButton.MouseButton1Click:Connect(function()
     guiVisible = not guiVisible
     print("ToggleGuiButton clicked, guiVisible:", guiVisible)
@@ -1362,9 +1362,8 @@ end)
 ItemLiftOption.MouseButton1Click:Connect(function()
     local function createTelekinesisTool()
         local tool = Instance.new("Tool")
-        tool.Name = "İtem Tool By Aras"
+        tool.Name = "İtem Lifter By Aras"
         tool.Parent = LocalPlayer.Backpack
-
         local handle = Instance.new("Part")
         handle.Name = "Handle"
         handle.Parent = tool
