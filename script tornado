@@ -5,8 +5,6 @@ local executorName = getexecutorname and getexecutorname() or "Unknown"
 local isSupported = executorName == "JJSploit" or
                     executorName == "Solara" or
                     executorName == "Arceus X" or
-                    executorName == "Arceus" or
-                    executorName == "ArceusX" or
                     executorName == "Fluxus" or
                     executorName == "Codex" or
                     executorName == "Xeno" or
@@ -17,7 +15,8 @@ local isSupported = executorName == "JJSploit" or
                     executorName == "Kiwi" or
                     executorName == "DuckySploit" or
                     executorName == "Luna" or
-                    executorName == "NX"
+                    executorName == "NX"   or
+					executorName == "Delta" 
 
 -- Roblox bildirim fonksiyonu
 local function showNotification(title, description, buttonText, duration)
