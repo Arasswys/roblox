@@ -20,19 +20,35 @@ local isSupported = executorName == "JJSploit" or
 -- Roblox bildirim fonksiyonu
 local function showNotification(title, description, buttonText, duration)
     local StarterGui = game:GetService("StarterGui")
+    local success, userId = pcall(function()
+        return game:GetService("Players"):GetUserIdFromNameAsync("Arasbey232323")
+    end)
+    local icon = success and game:GetService("Players"):GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100) or ""
     StarterGui:SetCore("SendNotification", {
         Title = title,
-        Text = description .. " - By Arasbey232323",
+        Text = description,
+        Icon = icon,
         Button1 = buttonText,
         Duration = duration
     })
 end
 
+-- Sağ altta bildirim gösterme fonksiyonu
+local function showBottomRightNotification(text)
+    local StarterGui = game:GetService("StarterGui")
+    StarterGui:SetCore("SendNotification", {
+        Title = "Sorry.",
+        Text = text,
+        Duration = 5,
+        Offset = Vector2.new(-200, -100) -- Sağ altta konumlandırmak için offset
+    })
+end
+
 -- Koşullu kontrol
 if isSupported then
-    showNotification(executorName .. " Is Supported!", "Tornado Parts is opening..", "Ok", 5)
+    showNotification(executorName .. " Is Supported!", "Tornado Parts is opening pls wait...", "Ok", 5)
 else
-    showNotification("Executor Not Supported!", "Tornado Parts cannot be opened :(", "Ok", 5)
+    showNotification(" Sorry Executor Not Supported!", "Sorry Tornado Parts cannot be opened :(", "Ok", 5)
     return -- Desteklenmiyorsa script burada durur
 end
 
@@ -314,7 +330,7 @@ CloseButton.Parent = MainFrame
 
 -- Kapat düğmesini yuvarlat
 local CloseCorner = Instance.new("UICorner")
-CloseCorner.CornerRadius = UDim.new(0, 15)
+CloseCorner.CornerRadius = UDim.new(0, 10)
 CloseCorner.Parent = CloseButton
 
 -- Ok Düğmesi (Açılır Menü)
@@ -424,6 +440,17 @@ ItemLiftOption.Font = Enum.Font.Fondamento
 ItemLiftOption.TextSize = 16
 ItemLiftOption.Parent = ScrollingFrame
 
+-- Yeni "Toss Unfixed Parts" Seçeneği
+local TossPartsOption = Instance.new("TextButton")
+TossPartsOption.Size = UDim2.new(1, 0, 0, 40)
+TossPartsOption.Position = UDim2.new(0, 0, 0, 240)
+TossPartsOption.Text = "Toss Unfixed Parts"
+TossPartsOption.BackgroundColor3 = Color3.fromRGB(255, 69, 0) -- Turuncu-Kırmızı
+TossPartsOption.TextColor3 = Color3.fromRGB(255, 255, 255)
+TossPartsOption.Font = Enum.Font.Fondamento
+TossPartsOption.TextSize = 16
+TossPartsOption.Parent = ScrollingFrame
+
 -- CanvasSize ve Pozisyonları Dinamik Olarak Ayarlama
 local function updateLayout()
     local currentY = 0
@@ -457,6 +484,10 @@ local function updateLayout()
     -- ItemLiftOption
     ItemLiftOption.Position = UDim2.new(0, 0, 0, currentY)
     currentY = currentY + ItemLiftOption.Size.Y.Offset
+
+    -- TossPartsOption
+    TossPartsOption.Position = UDim2.new(0, 0, 0, currentY)
+    currentY = currentY + TossPartsOption.Size.Y.Offset
 
     -- CanvasSize'ı güncelle
     ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, currentY + 10)
@@ -633,10 +664,10 @@ SelectionFrame.BorderSizePixel = 2
 SelectionFrame.Visible = false
 SelectionFrame.Parent = ScreenGui
 
--- Launch Butonu
+-- Launch Butonu (Ekranın tam ortasında)
 local LaunchButton = Instance.new("TextButton")
 LaunchButton.Size = UDim2.new(0, 100, 0, 40)
-LaunchButton.Position = UDim2.new(0.5, -50, 0.7, 0)
+LaunchButton.Position = UDim2.new(0.5, -50, 0.5, -20) -- Ekranın tam ortası
 LaunchButton.Text = "Launch"
 LaunchButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
 LaunchButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -648,7 +679,7 @@ LaunchButton.Parent = ScreenGui
 -- Throw Until Kill Butonu (LaunchButton’un altında)
 local ThrowUntilKillButton = Instance.new("TextButton")
 ThrowUntilKillButton.Size = UDim2.new(0, 100, 0, 30)
-ThrowUntilKillButton.Position = UDim2.new(0.5, -50, 0.7, 45) -- LaunchButton’un 5 birim altında
+ThrowUntilKillButton.Position = UDim2.new(0.5, -50, 0.5, 25) -- LaunchButton’un 5 birim altında
 ThrowUntilKillButton.Text = "Throw Until Kill: On"
 ThrowUntilKillButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Varsayılan olarak açık (yeşil)
 ThrowUntilKillButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -665,7 +696,7 @@ ThrowUntilKillCorner.Parent = ThrowUntilKillButton
 -- Stop Butonu
 local StopButton = Instance.new("TextButton")
 StopButton.Size = UDim2.new(0, 100, 0, 40)
-StopButton.Position = UDim2.new(0.5, -50, 0.7, 0)
+StopButton.Position = UDim2.new(0.5, -50, 0.5, -20) -- Ekranın tam ortası
 StopButton.Text = "Stop"
 StopButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 StopButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -677,7 +708,7 @@ StopButton.Parent = ScreenGui
 -- Çarpı Butonu
 local ExitButton = Instance.new("TextButton")
 ExitButton.Size = UDim2.new(0, 30, 0, 30)
-ExitButton.Position = UDim2.new(0.5, 20, 0.7, 0)
+ExitButton.Position = UDim2.new(0.5, 20, 0.5, -20)
 ExitButton.Text = "×"
 ExitButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 ExitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -690,6 +721,78 @@ ExitButton.Parent = ScreenGui
 local ExitCorner = Instance.new("UICorner")
 ExitCorner.CornerRadius = UDim.new(0, 15)
 ExitCorner.Parent = ExitButton
+
+-- Yeni GUI (Toss Unfixed Parts Kontrolü)
+local TossGui = Instance.new("Frame")
+TossGui.Size = UDim2.new(0, 150, 0, 150)
+TossGui.Position = UDim2.new(0, 10, 1, -160)
+TossGui.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+TossGui.BorderSizePixel = 0
+TossGui.Visible = false
+TossGui.Parent = ScreenGui
+
+-- TossGui Başlık
+local TossTitle = Instance.new("TextLabel")
+TossTitle.Size = UDim2.new(1, 0, 0, 30)
+TossTitle.Position = UDim2.new(0, 0, 0, 0)
+TossTitle.Text = "Toss Unfixed Parts"
+TossTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+TossTitle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TossTitle.Font = Enum.Font.Fondamento
+TossTitle.TextSize = 18
+TossTitle.Parent = TossGui
+
+-- TossGui Launch Butonu
+local TossLaunchButton = Instance.new("TextButton")
+TossLaunchButton.Size = UDim2.new(0.8, 0, 0, 40)
+TossLaunchButton.Position = UDim2.new(0.1, 0, 0.3, 0)
+TossLaunchButton.Text = "Launch"
+TossLaunchButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+TossLaunchButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TossLaunchButton.Font = Enum.Font.Fondamento
+TossLaunchButton.TextSize = 18
+TossLaunchButton.Parent = TossGui
+
+-- TossGui Stop Butonu
+local TossStopButton = Instance.new("TextButton")
+TossStopButton.Size = UDim2.new(0.8, 0, 0, 40)
+TossStopButton.Position = UDim2.new(0.1, 0, 0.3, 0)
+TossStopButton.Text = "Stop"
+TossStopButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TossStopButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TossStopButton.Font = Enum.Font.Fondamento
+TossStopButton.TextSize = 18
+TossStopButton.Visible = false
+TossStopButton.Parent = TossGui
+
+-- TossGui Uyarı Metni
+local TossWarningLabel = Instance.new("TextLabel")
+TossWarningLabel.Size = UDim2.new(1, 0, 0, 30)
+TossWarningLabel.Position = UDim2.new(0, 0, 0.55, 0)
+TossWarningLabel.Text = ""
+TossWarningLabel.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TossWarningLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TossWarningLabel.Font = Enum.Font.Fondamento
+TossWarningLabel.TextSize = 14
+TossWarningLabel.Visible = false
+TossWarningLabel.Parent = TossGui
+
+-- TossGui Çarpı Butonu
+local TossExitButton = Instance.new("TextButton")
+TossExitButton.Size = UDim2.new(0, 30, 0, 30)
+TossExitButton.Position = UDim2.new(1, -35, 0, 5)
+TossExitButton.Text = "×"
+TossExitButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TossExitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TossExitButton.Font = Enum.Font.Fondamento
+TossExitButton.TextSize = 18
+TossExitButton.Visible = false
+TossExitButton.Parent = TossGui
+
+-- Çarpı düğmesini yuvarlat
+local TossExitCorner = Instance.new("UICorner")
+TossExitCorner.CornerRadius = UDim.new(0, 15)
+TossExitCorner.Parent = TossExitButton
 
 -- Toggle GUI işlevi
 local guiVisible = true -- GUI başlangıçta açık olacak
@@ -704,6 +807,7 @@ ToggleGuiButton.MouseButton1Click:Connect(function()
     ThrowUntilKillButton.Visible = guiVisible and LaunchButton.Visible
     StopButton.Visible = guiVisible and StopButton.Visible
     ExitButton.Visible = guiVisible and ExitButton.Visible
+    TossGui.Visible = guiVisible and TossGui.Visible
     playSound("12221967")
 end)
 
@@ -721,6 +825,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         StopButton.Visible = false
         ExitButton.Visible = false
         ToggleGuiButton.Visible = false
+        TossGui.Visible = false
         playSound("12221967")
     end
 end)
@@ -748,6 +853,7 @@ MinimizeButton.MouseButton1Click:Connect(function()
         ExitButton.Visible = false
         dropdownVisible = false
         ArrowButton.Text = "↓"
+        TossGui.Visible = false
     else
         MainFrame:TweenSize(UDim2.new(0, 300, 0, 250), "Out", "Quad", 0.3, true)
         MinimizeButton.Text = "-"
@@ -920,89 +1026,67 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
--- Ring Parts Logic (Tornado Parts için kullanılacak)
+-- Arayüzü sürükleme (TossGui)
+local draggingToss
+local dragInputToss
+local dragStartToss
+local startPosToss
+
+local function updateToss(input)
+    local delta = input.Position - dragStartToss
+    TossGui.Position = UDim2.new(startPosToss.X.Scale, startPosToss.X.Offset + delta.X, startPosToss.Y.Scale, startPosToss.Y.Offset + delta.Y)
+end
+
+TossGui.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        draggingToss = true
+        dragStartToss = input.Position
+        startPosToss = TossGui.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                draggingToss = false
+            end
+        end)
+    end
+end)
+
+TossGui.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInputToss = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInputToss and draggingToss then
+        updateToss(input)
+    end
+end)
+
+-- Tornado Parts Logic
 local Folder = Instance.new("Folder", Workspace)
 local Part = Instance.new("Part", Folder)
-local Attachment1 = Instance.new("Attachment", Part)
 Part.Anchored = true
 Part.CanCollide = false
 Part.Transparency = 1
 
-if not getgenv().Network then
-    getgenv().Network = {
-        BaseParts = {},
-        Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
-    }
-
-    Network.RetainPart = function(Part)
-        if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(Workspace) then
-            table.insert(Network.BaseParts, Part)
-            Part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
-            Part.CanCollide = false
+-- Ring Parts mantığı: Parçaları toplama ve kontrol etme
+local function RetainPart(Part)
+    if Part:IsA("BasePart") and not Part.Anchored and Part:IsDescendantOf(Workspace) then
+        if Part.Parent == LocalPlayer.Character or Part:IsDescendantOf(LocalPlayer.Character) then
+            return false
         end
-    end
-
-    local function EnablePartControl()
-        LocalPlayer.ReplicationFocus = Workspace
-        RunService.Heartbeat:Connect(function()
-            pcall(function()
-                for _, Part in pairs(Network.BaseParts) do
-                    if Part:IsDescendantOf(Workspace) then
-                        Part.Velocity = Network.Velocity
-                    end
-                end
-            end)
-        end)
-    end
-
-    EnablePartControl()
-end
-
-local function ForcePart(v)
-    if v:IsA("Part") and not v.Anchored and not v.Parent:FindFirstChild("Humanoid") and not v.Parent:FindFirstChild("Head") and v.Name ~= "Handle" then
-        for _, x in next, v:GetChildren() do
-            if x:IsA("BodyAngularVelocity") or x:IsA("BodyForce") or x:IsA("BodyGyro") or x:IsA("BodyPosition") or x:IsA("BodyThrust") or x:IsA("BodyVelocity") or x:IsA("RocketPropulsion") then
-                x:Destroy()
-            end
-        end
-        if v:FindFirstChild("Attachment") then
-            v:FindFirstChild("Attachment"):Destroy()
-        end
-        if v:FindFirstChild("AlignPosition") then
-            v:FindFirstChild("AlignPosition"):Destroy()
-        end
-        if v:FindFirstChild("Torque") then
-            v:FindFirstChild("Torque"):Destroy()
-        end
-        v.CanCollide = false
-        local Torque = Instance.new("Torque", v)
-        Torque.Torque = Vector3.new(100000, 100000, 100000)
-        local AlignPosition = Instance.new("AlignPosition", v)
-        local Attachment2 = Instance.new("Attachment", v)
-        Torque.Attachment0 = Attachment2
-        AlignPosition.MaxForce = 9999999999999999
-        AlignPosition.MaxVelocity = math.huge
-        AlignPosition.Responsiveness = 200
-        AlignPosition.Attachment0 = Attachment2
-        AlignPosition.Attachment1 = Attachment1
+        Part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
+        Part.CanCollide = false
         return true
     end
     return false
 end
 
-local radius = 50
-local rotationSpeed = 50
-local tornadoHeightOffset = 50
-local ringPartsEnabled = false
-local angleOffset = 0
 local parts = {}
-local descendantConnection
-
 local function addPart(part)
-    if ringPartsEnabled and ForcePart(part) then
+    if RetainPart(part) then
         if not table.find(parts, part) then
             table.insert(parts, part)
-            Network.RetainPart(part)
         end
     end
 end
@@ -1011,38 +1095,23 @@ local function removePart(part)
     local index = table.find(parts, part)
     if index then
         table.remove(parts, index)
-        local indexInNetwork = table.find(Network.BaseParts, part)
-        if indexInNetwork then
-            table.remove(Network.BaseParts, indexInNetwork)
-        end
     end
 end
 
-local function startPartCollection()
-    for _, part in pairs(Workspace:GetDescendants()) do
-        addPart(part)
-    end
-    descendantConnection = Workspace.DescendantAdded:Connect(addPart)
-    Workspace.DescendantRemoving:Connect(removePart)
+-- Başlangıçta parçaları topla
+for _, part in pairs(Workspace:GetDescendants()) do
+    addPart(part)
 end
 
-local function stopPartCollection()
-    if descendantConnection then
-        descendantConnection:Disconnect()
-        descendantConnection = nil
-    end
-    for i = #parts, 1, -1 do
-        local part = parts[i]
-        removePart(part)
-        if part then
-            for _, x in next, part:GetChildren() do
-                if x:IsA("Torque") or x:IsA("AlignPosition") or x:IsA("Attachment") then
-                    x:Destroy()
-                end
-            end
-        end
-    end
-end
+Workspace.DescendantAdded:Connect(addPart)
+Workspace.DescendantRemoving:Connect(removePart)
+
+local radius = 50
+local rotationSpeed = 50
+local tornadoHeightOffset = 50
+local ringPartsEnabled = false
+local angleOffset = 0
+local attractionStrength = 1000
 
 RunService.Heartbeat:Connect(function(deltaTime)
     if not ringPartsEnabled then return end
@@ -1052,35 +1121,149 @@ RunService.Heartbeat:Connect(function(deltaTime)
         local center = humanoidRootPart.Position + Vector3.new(0, tornadoHeightOffset, 0)
         angleOffset = angleOffset + (rotationSpeed * deltaTime)
         
-        for i, part in pairs(parts) do
+        local unanchoredCount = #parts
+        if unanchoredCount == 0 then
+            showBottomRightNotification("Unanchored Parts Not Found!")
+        end
+        
+        for _, part in pairs(parts) do
             if part.Parent and not part.Anchored then
-                local angle = (angleOffset + (i * 2 * math.pi / math.max(1, #parts))) % (2 * math.pi)
-                local targetX = center.X + math.cos(angle) * radius
-                local targetZ = center.Z + math.sin(angle) * radius
-                local targetY = center.Y + (tornadoHeightOffset * math.abs(math.sin((part.Position.Y - center.Y) / tornadoHeightOffset)))
-                local targetPos = Vector3.new(targetX, targetY, targetZ)
-                
-                local bodyPosition = part:FindFirstChild("BodyPosition")
-                if not bodyPosition then
-                    bodyPosition = Instance.new("BodyPosition", part)
-                    bodyPosition.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-                    bodyPosition.D = 500
-                    bodyPosition.P = 10000
-                end
-                bodyPosition.Position = targetPos
+                local pos = part.Position
+                local distance = (Vector3.new(pos.X, center.Y, pos.Z) - center).Magnitude
+                local angle = math.atan2(pos.Z - center.Z, pos.X - center.X)
+                local newAngle = angle + math.rad(rotationSpeed * deltaTime)
+                local targetPos = Vector3.new(
+                    center.X + math.cos(newAngle) * math.min(radius, distance),
+                    center.Y + (tornadoHeightOffset * math.abs(math.sin((pos.Y - center.Y) / tornadoHeightOffset))),
+                    center.Z + math.sin(newAngle) * math.min(radius, distance)
+                )
+                local directionToTarget = (targetPos - part.Position).Unit
+                part.Velocity = directionToTarget * attractionStrength
             end
         end
     end
 end)
 
--- Minigun Logic
+-- Toss Unfixed Parts Logic (Minigun mantığını kullanarak havaya fırlatma)
+local tossActive = false
+local tossedParts = {}
+local tossConnections = {}
+
+-- Minigun'dan alınan parçaları toplama fonksiyonu
+local function collectUnanchoredParts()
+    local collectedParts = {}
+    for _, part in pairs(Workspace:GetDescendants()) do
+        if part:IsA("Part") and not part.Anchored and not part.Parent:FindFirstChild("Humanoid") and not part.Parent:FindFirstChild("Head") and part.Name ~= "Handle" then
+            table.insert(collectedParts, part)
+        end
+    end
+    return collectedParts
+end
+
+-- Minigun mantığını kullanarak havaya fırlatma
+local function applyTossToParts()
+    for _, connection in pairs(tossConnections) do
+        if connection then
+            connection:Destroy()
+        end
+    end
+    tossConnections = {}
+    tossedParts = collectUnanchoredParts()
+    if #tossedParts == 0 then
+        showBottomRightNotification("Unanchored Parts Not Found!")
+    end
+    for _, part in pairs(tossedParts) do
+        if part and part.Parent then
+            local bodyPosition = Instance.new("BodyPosition")
+            bodyPosition.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+            bodyPosition.D = 500
+            bodyPosition.P = 10000
+            bodyPosition.Position = part.Position + Vector3.new(0, 500, 0) -- Havaya doğru pozisyon
+            bodyPosition.Parent = part
+            table.insert(tossConnections, bodyPosition)
+            part.CanCollide = true
+            part.Velocity = Vector3.new(0, 100, 0) -- Ekstra hız
+        end
+    end
+end
+
+local function stopTossing()
+    for _, connection in pairs(tossConnections) do
+        if connection then
+            connection:Destroy()
+        end
+    end
+    tossConnections = {}
+    tossActive = false
+    for _, part in pairs(tossedParts) do
+        if part then
+            part.CanCollide = false
+            part.Velocity = Vector3.new(0, 0, 0)
+        end
+    end
+    tossedParts = {}
+end
+
+TossPartsOption.MouseButton1Click:Connect(function()
+    TossGui.Visible = not TossGui.Visible
+    SpeedInput.Visible = false
+    AdjustSpeedOption.BackgroundColor3 = Color3.fromRGB(150, 150, 150)
+    DropdownFrame.Visible = false
+    dropdownVisible = false
+    ArrowButton.Text = "↓"
+    playSound("12221967")
+end)
+
+TossLaunchButton.MouseButton1Click:Connect(function()
+    if not tossActive then
+        tossActive = true
+        TossLaunchButton.Visible = false
+        TossStopButton.Visible = true
+        applyTossToParts()
+        playSound("12221967")
+    end
+end)
+
+TossStopButton.MouseButton1Click:Connect(function()
+    if tossActive then
+        tossActive = false
+        TossStopButton.Visible = false
+        TossExitButton.Visible = true
+        stopTossing()
+        playSound("12221967")
+    end
+end)
+
+TossExitButton.MouseButton1Click:Connect(function()
+    tossActive = false
+    TossGui.Visible = false
+    TossLaunchButton.Visible = true
+    TossStopButton.Visible = false
+    TossExitButton.Visible = false
+    stopTossing()
+    playSound("12221967")
+end)
+
+-- Minigun Logic (Değiştirilmedi)
 local minigunActive = false
 local targetPlayer = nil
 local isPulling = false
 local pullConnections = {}
 local renderConnection = nil
 local throwUntilKillEnabled = true -- Varsayılan olarak açık
-local unanchoredParts = {} -- Parçaları global olarak saklamak için
+local unanchoredParts = {}
+
+-- Uyarı Metni (Minigun için)
+local MinigunWarningLabel = Instance.new("TextLabel")
+MinigunWarningLabel.Size = UDim2.new(1, 0, 0, 30)
+MinigunWarningLabel.Position = UDim2.new(0.5, -50, 0.5, 60) -- LaunchButton'un altında
+MinigunWarningLabel.Text = ""
+MinigunWarningLabel.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+MinigunWarningLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+MinigunWarningLabel.Font = Enum.Font.Fondamento
+MinigunWarningLabel.TextSize = 14
+MinigunWarningLabel.Visible = false
+MinigunWarningLabel.Parent = ScreenGui
 
 -- "Throw Until Kill" Butonunun İşlevi
 ThrowUntilKillButton.MouseButton1Click:Connect(function()
@@ -1090,27 +1273,17 @@ ThrowUntilKillButton.MouseButton1Click:Connect(function()
     playSound("12221967")
 end)
 
-local function collectUnanchoredParts()
-    local parts = {}
-    for _, part in pairs(Workspace:GetDescendants()) do
-        if part:IsA("Part") and not part.Anchored and not part.Parent:FindFirstChild("Humanoid") and not part.Parent:FindFirstChild("Head") and part.Name ~= "Handle" then
-            table.insert(parts, part)
-        end
-    end
-    return parts
-end
-
 local function applyPullToParts(target)
-    -- Önceki BodyPosition'ları temizle
     for _, connection in pairs(pullConnections) do
         if connection then
             connection:Destroy()
         end
     end
     pullConnections = {}
-
-    -- Yeni parçaları topla ve BodyPosition ekle
     unanchoredParts = collectUnanchoredParts()
+    if #unanchoredParts == 0 then
+        showBottomRightNotification("Unanchored Parts Not Found!")
+    end
     for _, part in pairs(unanchoredParts) do
         if part and part.Parent then
             local bodyPosition = Instance.new("BodyPosition")
@@ -1133,7 +1306,6 @@ local function updatePulling()
         end
         local humanoid = targetPlayer.Parent:FindFirstChild("Humanoid")
         if humanoid and humanoid.Health > 0 then
-            -- Canlı takip: Hedef oyuncunun güncel pozisyonuna göre BodyPosition.Position'ı güncelle
             for _, bodyPosition in pairs(pullConnections) do
                 if bodyPosition and bodyPosition.Parent then
                     bodyPosition.Position = targetPlayer.Position
@@ -1172,19 +1344,14 @@ local function stopPulling()
 end
 
 local function startMinigunLoop()
-    -- Sürekli güncelleme döngüsünü başlat
     updatePulling()
-
-    -- Throw Until Kill açıkken döngü olmadan devam eder, kapalıyken 2 saniyede bir parçaları yeniler
     while isPulling and targetPlayer and targetPlayer.Parent do
         local humanoid = targetPlayer.Parent:FindFirstChild("Humanoid")
         if humanoid and humanoid.Health > 0 then
             if not throwUntilKillEnabled then
-                -- Throw Until Kill kapalıysa, 2 saniyede bir parçaları yenile
                 applyPullToParts(targetPlayer)
                 wait(2)
             else
-                -- Throw Until Kill açıksa, döngüye girmeden sürekli çekim
                 wait(0.1)
             end
         else
@@ -1208,6 +1375,7 @@ MinigunOption.MouseButton1Click:Connect(function()
         ThrowUntilKillButton.Visible = false
         StopButton.Visible = false
         ExitButton.Visible = false
+        MinigunWarningLabel.Visible = false
         if renderConnection then
             renderConnection:Disconnect()
             renderConnection = nil
@@ -1295,6 +1463,7 @@ ExitButton.MouseButton1Click:Connect(function()
     ThrowUntilKillButton.Visible = false
     StopButton.Visible = false
     ExitButton.Visible = false
+    MinigunWarningLabel.Visible = false
     if renderConnection then
         renderConnection:Disconnect()
         renderConnection = nil
@@ -1306,11 +1475,6 @@ ToggleButton.MouseButton1Click:Connect(function()
     ringPartsEnabled = not ringPartsEnabled
     ToggleButton.Text = ringPartsEnabled and "Tornado Parts On" or "Tornado Parts Off"
     ToggleButton.BackgroundColor3 = ringPartsEnabled and Color3.fromRGB(50, 205, 50) or Color3.fromRGB(160, 82, 45)
-    if ringPartsEnabled then
-        startPartCollection()
-    else
-        stopPartCollection()
-    end
     playSound("12221967")
 end)
 
@@ -1471,3 +1635,26 @@ local function SendChatMessage(message)
         end
     end)
 end
+
+-- Sabitsiz Parça Takip Fonksiyonu
+local function checkUnanchoredParts()
+    local unanchoredCount = #collectUnanchoredParts()
+    return unanchoredCount > 0
+end
+
+-- Canlı Takip
+RunService.Heartbeat:Connect(function()
+    if TossGui.Visible then
+        if not checkUnanchoredParts() then
+            showBottomRightNotification("Unanchored Parts Not Found!")
+        end
+    end
+    if minigunActive and (LaunchButton.Visible or StopButton.Visible or ExitButton.Visible) then
+        if not checkUnanchoredParts() then
+            showBottomRightNotification("Unanchored Parts Not Found!")
+        end
+    end
+    if ringPartsEnabled and #parts == 0 then
+        showBottomRightNotification("Unanchored Parts Not Found!")
+    end
+end)
