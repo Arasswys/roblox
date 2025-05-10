@@ -440,11 +440,11 @@ ItemLiftOption.Font = Enum.Font.Fondamento
 ItemLiftOption.TextSize = 16
 ItemLiftOption.Parent = ScrollingFrame
 
--- Yeni "Toss Unfixed Parts" Seçeneği
+-- Yeni "Toss UnAnchored Parts" Seçeneği
 local TossPartsOption = Instance.new("TextButton")
 TossPartsOption.Size = UDim2.new(1, 0, 0, 40)
 TossPartsOption.Position = UDim2.new(0, 0, 0, 240)
-TossPartsOption.Text = "Toss Unfixed Parts"
+TossPartsOption.Text = "Toss UnAnchored Parts"
 TossPartsOption.BackgroundColor3 = Color3.fromRGB(255, 69, 0) -- Turuncu-Kırmızı
 TossPartsOption.TextColor3 = Color3.fromRGB(255, 255, 255)
 TossPartsOption.Font = Enum.Font.Fondamento
@@ -722,7 +722,7 @@ local ExitCorner = Instance.new("UICorner")
 ExitCorner.CornerRadius = UDim.new(0, 15)
 ExitCorner.Parent = ExitButton
 
--- Yeni GUI (Toss Unfixed Parts Kontrolü)
+-- Yeni GUI (Toss UnAnchored Parts Kontrolü)
 local TossGui = Instance.new("Frame")
 TossGui.Size = UDim2.new(0, 150, 0, 150)
 TossGui.Position = UDim2.new(0, 10, 1, -160)
@@ -735,7 +735,7 @@ TossGui.Parent = ScreenGui
 local TossTitle = Instance.new("TextLabel")
 TossTitle.Size = UDim2.new(1, 0, 0, 30)
 TossTitle.Position = UDim2.new(0, 0, 0, 0)
-TossTitle.Text = "Toss Unfixed Parts"
+TossTitle.Text = "Toss UnAnchored Parts"
 TossTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 TossTitle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 TossTitle.Font = Enum.Font.Fondamento
@@ -1144,7 +1144,7 @@ RunService.Heartbeat:Connect(function(deltaTime)
     end
 end)
 
--- Toss Unfixed Parts Logic (Minigun mantığını kullanarak havaya fırlatma)
+-- Toss UnAnchored Parts Logic (Minigun mantığını kullanarak havaya fırlatma)
 local tossActive = false
 local tossedParts = {}
 local tossConnections = {}
