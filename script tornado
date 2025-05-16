@@ -1430,7 +1430,7 @@ local function updateMinigunToTarget(target)
         if humanoid and humanoid.Health > 0 then
             for _, bodyPosition in pairs(minigunConnections) do
                 if bodyPosition and bodyPosition.Parent then
-                    bodyPosition.Position = minigunTarget.Position + Vector3.new(0, 15, 0) -- 5 birim yukarıda tut
+                    bodyPosition.Position = minigunTarget.Position + Vector3.new(0, 5, 0) -- 5 birim yukarıda tut
                 end
             end
             for _, part in pairs(minigunParts) do
