@@ -11,7 +11,7 @@ local isSupported = executorName == "JJSploit" or
                     executorName == "Wave" or
                     executorName == "Delta" or
                     executorName == "Sentinel" or
-                    executorName == "RoExec" or
+                    executorName == "Drift" or
                     executorName == "Kiwi" or
                     executorName == "DuckySploit" or
                     executorName == "Luna" or
