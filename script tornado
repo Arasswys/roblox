@@ -419,26 +419,26 @@ UpDownOption.Font = Enum.Font.Fondamento
 UpDownOption.TextSize = 16
 UpDownOption.Parent = ScrollingFrame
 
+local RocketOption = Instance.new("TextButton")
+RocketOption.Size = UDim2.new(1, 0, 0, 40)
+RocketOption.Position = UDim2.new(0, 0, 0, 160)
+RocketOption.Text = "Rocket Off"
+RocketOption.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+RocketOption.TextColor3 = Color3.fromRGB(255, 255, 255)
+RocketOption.Font = Enum.Font.Fondamento
+RocketOption.TextSize = 16
+RocketOption.Parent = ScrollingFrame
+
+-- Yeni "Minigun" Seçeneği (eski Minigun V2 yerine)
 local MinigunOption = Instance.new("TextButton")
 MinigunOption.Size = UDim2.new(1, 0, 0, 40)
-MinigunOption.Position = UDim2.new(0, 0, 0, 160)
-MinigunOption.Text = "Minigun Off"
-MinigunOption.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+MinigunOption.Position = UDim2.new(0, 0, 0, 200)
+MinigunOption.Text = "Minigun"
+MinigunOption.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
 MinigunOption.TextColor3 = Color3.fromRGB(255, 255, 255)
 MinigunOption.Font = Enum.Font.Fondamento
 MinigunOption.TextSize = 16
 MinigunOption.Parent = ScrollingFrame
-
--- Yeni "Minigun V2" Seçeneği
-local MinigunV2Option = Instance.new("TextButton")
-MinigunV2Option.Size = UDim2.new(1, 0, 0, 40)
-MinigunV2Option.Position = UDim2.new(0, 0, 0, 200)
-MinigunV2Option.Text = "Minigun V2"
-MinigunV2Option.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
-MinigunV2Option.TextColor3 = Color3.fromRGB(255, 255, 255)
-MinigunV2Option.Font = Enum.Font.Fondamento
-MinigunV2Option.TextSize = 16
-MinigunV2Option.Parent = ScrollingFrame
 
 -- CanvasSize ve Pozisyonları Dinamik Olarak Ayarlama
 local function updateLayout()
@@ -466,13 +466,13 @@ local function updateLayout()
     UpDownOption.Position = UDim2.new(0, 0, 0, currentY)
     currentY = currentY + UpDownOption.Size.Y.Offset
 
+    -- RocketOption
+    RocketOption.Position = UDim2.new(0, 0, 0, currentY)
+    currentY = currentY + RocketOption.Size.Y.Offset
+
     -- MinigunOption
     MinigunOption.Position = UDim2.new(0, 0, 0, currentY)
     currentY = currentY + MinigunOption.Size.Y.Offset
-
-    -- MinigunV2Option
-    MinigunV2Option.Position = UDim2.new(0, 0, 0, currentY)
-    currentY = currentY + MinigunV2Option.Size.Y.Offset
 
     -- CanvasSize'ı güncelle
     ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, currentY + 10)
@@ -649,7 +649,7 @@ SelectionFrame.BorderSizePixel = 2
 SelectionFrame.Visible = false
 SelectionFrame.Parent = ScreenGui
 
--- Kırmızı Kare (Minigun V2 için)
+-- Kırmızı Kare (Minigun için)
 local RedSelectionFrame = Instance.new("Frame")
 RedSelectionFrame.Size = UDim2.new(0, 100, 0, 100)
 RedSelectionFrame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
@@ -716,25 +716,25 @@ local ExitCorner = Instance.new("UICorner")
 ExitCorner.CornerRadius = UDim.new(0, 15)
 ExitCorner.Parent = ExitButton
 
--- Minigun V2 GUI
-local MinigunV2Gui = Instance.new("Frame")
-MinigunV2Gui.Size = UDim2.new(0, 200, 0, 100)
-MinigunV2Gui.Position = UDim2.new(0.5, -100, 0.5, -50)
-MinigunV2Gui.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-MinigunV2Gui.BorderSizePixel = 0
-MinigunV2Gui.Visible = false
-MinigunV2Gui.Parent = ScreenGui
+-- Minigun GUI
+local MinigunGui = Instance.new("Frame")
+MinigunGui.Size = UDim2.new(0, 200, 0, 100)
+MinigunGui.Position = UDim2.new(0.5, -100, 0.5, -50)
+MinigunGui.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+MinigunGui.BorderSizePixel = 0
+MinigunGui.Visible = false
+MinigunGui.Parent = ScreenGui
 
--- Minigun V2 Başlık
-local MinigunV2Title = Instance.new("TextLabel")
-MinigunV2Title.Size = UDim2.new(1, 0, 0, 30)
-MinigunV2Title.Position = UDim2.new(0, 0, 0, 0)
-MinigunV2Title.Text = "Minigun V2"
-MinigunV2Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-MinigunV2Title.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-MinigunV2Title.Font = Enum.Font.Fondamento
-MinigunV2Title.TextSize = 18
-MinigunV2Title.Parent = MinigunV2Gui
+-- Minigun Başlık
+local MinigunTitle = Instance.new("TextLabel")
+MinigunTitle.Size = UDim2.new(1, 0, 0, 30)
+MinigunTitle.Position = UDim2.new(0, 0, 0, 0)
+MinigunTitle.Text = "Minigun"
+MinigunTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+MinigunTitle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MinigunTitle.Font = Enum.Font.Fondamento
+MinigunTitle.TextSize = 18
+MinigunTitle.Parent = MinigunGui
 
 -- On Butonu
 local OnButton = Instance.new("TextButton")
@@ -745,7 +745,7 @@ OnButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
 OnButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 OnButton.Font = Enum.Font.Fondamento
 OnButton.TextSize = 18
-OnButton.Parent = MinigunV2Gui
+OnButton.Parent = MinigunGui
 
 -- Off Butonu
 local OffButton = Instance.new("TextButton")
@@ -756,23 +756,23 @@ OffButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 OffButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 OffButton.Font = Enum.Font.Fondamento
 OffButton.TextSize = 18
-OffButton.Parent = MinigunV2Gui
+OffButton.Parent = MinigunGui
 
--- Minigun V2 Kapatma Butonu
-local CloseMinigunV2Button = Instance.new("TextButton")
-CloseMinigunV2Button.Size = UDim2.new(0, 30, 0, 30)
-CloseMinigunV2Button.Position = UDim2.new(1, -35, 0, 5)
-CloseMinigunV2Button.Text = "×"
-CloseMinigunV2Button.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-CloseMinigunV2Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-CloseMinigunV2Button.Font = Enum.Font.Fondamento
-CloseMinigunV2Button.TextSize = 18
-CloseMinigunV2Button.Parent = MinigunV2Gui
+-- Minigun Kapatma Butonu
+local CloseMinigunButton = Instance.new("TextButton")
+CloseMinigunButton.Size = UDim2.new(0, 30, 0, 30)
+CloseMinigunButton.Position = UDim2.new(1, -35, 0, 5)
+CloseMinigunButton.Text = "×"
+CloseMinigunButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+CloseMinigunButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseMinigunButton.Font = Enum.Font.Fondamento
+CloseMinigunButton.TextSize = 18
+CloseMinigunButton.Parent = MinigunGui
 
 -- Kapatma düğmesini yuvarlat
-local CloseMinigunV2Corner = Instance.new("UICorner")
-CloseMinigunV2Corner.CornerRadius = UDim.new(0, 15)
-CloseMinigunV2Corner.Parent = CloseMinigunV2Button
+local CloseMinigunCorner = Instance.new("UICorner")
+CloseMinigunCorner.CornerRadius = UDim.new(0, 15)
+CloseMinigunCorner.Parent = CloseMinigunButton
 
 -- Toggle GUI işlevi
 local guiVisible = true -- GUI başlangıçta açık olacak
@@ -862,9 +862,9 @@ CloseCreditsButton.MouseButton1Click:Connect(function()
     playSound("12221967")
 end)
 
--- Kapatma işlevi (Minigun V2 GUI)
-CloseMinigunV2Button.MouseButton1Click:Connect(function()
-    MinigunV2Gui.Visible = false
+-- Kapatma işlevi (Minigun GUI)
+CloseMinigunButton.MouseButton1Click:Connect(function()
+    MinigunGui.Visible = false
     playSound("12221967")
 end)
 
@@ -1009,39 +1009,39 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
--- Arayüzü sürükleme (MinigunV2Gui)
-local draggingMinigunV2
-local dragInputMinigunV2
-local dragStartMinigunV2
-local startPosMinigunV2
+-- Arayüzü sürükleme (MinigunGui)
+local draggingMinigun
+local dragInputMinigun
+local dragStartMinigun
+local startPosMinigun
 
-local function updateMinigunV2(input)
-    local delta = input.Position - dragStartMinigunV2
-    MinigunV2Gui.Position = UDim2.new(startPosMinigunV2.X.Scale, startPosMinigunV2.X.Offset + delta.X, startPosMinigunV2.Y.Scale, startPosMinigunV2.Y.Offset + delta.Y)
+local function updateMinigun(input)
+    local delta = input.Position - dragStartMinigun
+    MinigunGui.Position = UDim2.new(startPosMinigun.X.Scale, startPosMinigun.X.Offset + delta.X, startPosMinigun.Y.Scale, startPosMinigun.Y.Offset + delta.Y)
 end
 
-MinigunV2Gui.InputBegan:Connect(function(input)
+MinigunGui.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        draggingMinigunV2 = true
-        dragStartMinigunV2 = input.Position
-        startPosMinigunV2 = MinigunV2Gui.Position
+        draggingMinigun = true
+        dragStartMinigun = input.Position
+        startPosMinigun = MinigunGui.Position
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
-                draggingMinigunV2 = false
+                draggingMinigun = false
             end
         end)
     end
 end)
 
-MinigunV2Gui.InputChanged:Connect(function(input)
+MinigunGui.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        dragInputMinigunV2 = input
+        dragInputMinigun = input
     end
 end)
 
 UserInputService.InputChanged:Connect(function(input)
-    if input == dragInputMinigunV2 and draggingMinigunV2 then
-        updateMinigunV2(input)
+    if input == dragInputMinigun and draggingMinigun then
+        updateMinigun(input)
     end
 end)
 
@@ -1198,8 +1198,8 @@ RunService.Heartbeat:Connect(function(deltaTime)
     end
 end)
 
--- Minigun Logic (Bu kısım tamamen aynı kalıyor)
-local minigunActive = false
+-- Rocket Logic (eski Minigun Logic)
+local rocketActive = false
 local targetPlayer = nil
 local isPulling = false
 local pullConnections = {}
@@ -1296,7 +1296,7 @@ local function stopPulling()
     unanchoredParts = {}
 end
 
-local function startMinigunLoop()
+local function startRocketLoop()
     -- Sürekli güncelleme döngüsünü başlat
     updatePulling()
 
@@ -1321,11 +1321,11 @@ local function startMinigunLoop()
     end
 end
 
-MinigunOption.MouseButton1Click:Connect(function()
-    minigunActive = not minigunActive
-    MinigunOption.Text = minigunActive and "Minigun On" or "Minigun Off"
-    MinigunOption.BackgroundColor3 = minigunActive and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
-    if not minigunActive then
+RocketOption.MouseButton1Click:Connect(function()
+    rocketActive = not rocketActive
+    RocketOption.Text = rocketActive and "Rocket On" or "Rocket Off"
+    RocketOption.BackgroundColor3 = rocketActive and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    if not rocketActive then
         stopPulling()
         targetPlayer = nil
         SelectionFrame.Visible = false
@@ -1341,15 +1341,15 @@ MinigunOption.MouseButton1Click:Connect(function()
     playSound("12221967")
 end)
 
--- Minigun V2 Logic
-local minigunV2Active = false
-local minigunV2Parts = {}
-local minigunV2Target = nil
-local minigunV2Connections = {}
-local angleOffsetV2 = 0
-local minigunV2Radius = 5 -- Parçaların oyuncunun üstünde dönme mesafesi
+-- Minigun Logic (eski Minigun V2 Logic)
+local minigunActive = false
+local minigunParts = {}
+local minigunTarget = nil
+local minigunConnections = {}
+local angleOffset = 0
+local minigunRadius = 5 -- Parçaların oyuncunun üstünde dönme mesafesi
 local isHolding = false -- Basılı tutma durumu
-local renderConnectionV2 = nil -- Kırmızı kareyi güncellemek için bağlantı
+local renderConnection = nil -- Kırmızı kareyi güncellemek için bağlantı
 
 -- Unanchored parçaları toplama fonksiyonu
 local function collectUnanchoredPartsV2()
@@ -1363,33 +1363,33 @@ local function collectUnanchoredPartsV2()
 end
 
 -- Parçalara BodyPosition ekleme fonksiyonu
-local function applyMinigunV2ToParts(target)
-    for _, connection in pairs(minigunV2Connections) do
+local function applyMinigunToParts(target)
+    for _, connection in pairs(minigunConnections) do
         if connection then
             connection:Destroy()
         end
     end
-    minigunV2Connections = {}
+    minigunConnections = {}
 
-    minigunV2Parts = collectUnanchoredPartsV2()
-    for _, part in pairs(minigunV2Parts) do
+    minigunParts = collectUnanchoredPartsV2()
+    for _, part in pairs(minigunParts) do
         if part and part.Parent then
             local bodyPosition = Instance.new("BodyPosition")
             bodyPosition.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
             bodyPosition.D = 500
             bodyPosition.P = 10000
             bodyPosition.Parent = part
-            table.insert(minigunV2Connections, bodyPosition)
+            table.insert(minigunConnections, bodyPosition)
             part.CanCollide = false -- Çarpma engellendi
         end
     end
 end
 
 -- Parçaları oyuncunun üstünde döndürme fonksiyonu
-local function updateMinigunV2AroundPlayer()
+local function updateMinigunAroundPlayer()
     local heartbeatConnection
     heartbeatConnection = RunService.Heartbeat:Connect(function(deltaTime)
-        if not minigunV2Active or isHolding then
+        if not minigunActive or isHolding then
             heartbeatConnection:Disconnect()
             return
         end
@@ -1397,14 +1397,14 @@ local function updateMinigunV2AroundPlayer()
         local humanoidRootPart = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
         if not humanoidRootPart then return end
 
-        local center = humanoidRootPart.Position + Vector3.new(0, 1, 0) -- 1 birim yukarıda tut
-        angleOffsetV2 = angleOffsetV2 + (rotationSpeed * deltaTime)
+        local center = humanoidRootPart.Position + Vector3.new(0, 5, 0) -- 5 birim yukarıda tut
+        angleOffset = angleOffset + (rotationSpeed * deltaTime)
 
-        for i, part in pairs(minigunV2Parts) do
+        for i, part in pairs(minigunParts) do
             if part.Parent and not part.Anchored then
-                local angle = (angleOffsetV2 + (i * 2 * math.pi / math.max(1, #minigunV2Parts))) % (2 * math.pi)
-                local targetX = center.X + math.cos(angle) * minigunV2Radius
-                local targetZ = center.Z + math.sin(angle) * minigunV2Radius
+                local angle = (angleOffset + (i * 2 * math.pi / math.max(1, #minigunParts))) % (2 * math.pi)
+                local targetX = center.X + math.cos(angle) * minigunRadius
+                local targetZ = center.Z + math.sin(angle) * minigunRadius
                 local targetY = center.Y
                 local targetPos = Vector3.new(targetX, targetY, targetZ)
 
@@ -1418,29 +1418,29 @@ local function updateMinigunV2AroundPlayer()
 end
 
 -- Parçaları hedef oyuncuya yönlendirme fonksiyonu
-local function updateMinigunV2ToTarget(target)
+local function updateMinigunToTarget(target)
     local heartbeatConnection
     heartbeatConnection = RunService.Heartbeat:Connect(function(deltaTime)
-        if not minigunV2Active or not minigunV2Target or not minigunV2Target.Parent or not isHolding then
+        if not minigunActive or not minigunTarget or not minigunTarget.Parent or not isHolding then
             heartbeatConnection:Disconnect()
             return
         end
 
-        local humanoid = minigunV2Target.Parent:FindFirstChild("Humanoid")
+        local humanoid = minigunTarget.Parent:FindFirstChild("Humanoid")
         if humanoid and humanoid.Health > 0 then
-            for _, bodyPosition in pairs(minigunV2Connections) do
+            for _, bodyPosition in pairs(minigunConnections) do
                 if bodyPosition and bodyPosition.Parent then
-                    bodyPosition.Position = minigunV2Target.Position + Vector3.new(0, 5, 0) -- 5 birim yukarıda tut
+                    bodyPosition.Position = minigunTarget.Position + Vector3.new(0, 5, 0) -- 5 birim yukarıda tut
                 end
             end
-            for _, part in pairs(minigunV2Parts) do
+            for _, part in pairs(minigunParts) do
                 if part and part.Parent then
-                    part.Velocity = (minigunV2Target.Position - part.Position).Unit * 20 -- Yavaş hareket
+                    part.Velocity = (minigunTarget.Position - part.Position).Unit * 20 -- Yavaş hareket
                     part.CanCollide = false -- Çarpma engellendi
                 end
             end
         else
-            stopMinigunV2()
+            stopMinigun()
             RedSelectionFrame.Visible = false
             heartbeatConnection:Disconnect()
         end
@@ -1449,10 +1449,10 @@ end
 
 -- Kırmızı kareyi güncelleyen fonksiyon
 local function updateRedSelectionFrame()
-    if minigunV2Target and minigunV2Target.Parent and isHolding then
+    if minigunTarget and minigunTarget.Parent and isHolding then
         local camera = Workspace.CurrentCamera
         if camera then
-            local vector, onScreen = camera:WorldToScreenPoint(minigunV2Target.Position)
+            local vector, onScreen = camera:WorldToScreenPoint(minigunTarget.Position)
             if onScreen then
                 RedSelectionFrame.Position = UDim2.new(0, vector.X - 50, 0, vector.Y - 50)
                 RedSelectionFrame.Visible = true
@@ -1465,49 +1465,49 @@ local function updateRedSelectionFrame()
     end
 end
 
-local function stopMinigunV2()
-    for _, connection in pairs(minigunV2Connections) do
+local function stopMinigun()
+    for _, connection in pairs(minigunConnections) do
         if connection then
             connection:Destroy()
         end
     end
-    minigunV2Connections = {}
-    minigunV2Parts = {}
-    minigunV2Target = nil
+    minigunConnections = {}
+    minigunParts = {}
+    minigunTarget = nil
     isHolding = false
     RedSelectionFrame.Visible = false
-    if renderConnectionV2 then
-        renderConnectionV2:Disconnect()
-        renderConnectionV2 = nil
+    if renderConnection then
+        renderConnection:Disconnect()
+        renderConnection = nil
     end
 end
 
--- Minigun V2 aktif olduğunda parçaları oyuncunun üstünde döndürme
-local function startMinigunV2Loop()
-    applyMinigunV2ToParts(LocalPlayer.Character.HumanoidRootPart) -- İlk olarak oyuncunun üstüne topluyoruz
-    updateMinigunV2AroundPlayer() -- Parçaları oyuncunun üstünde döndürmeye başla
+-- Minigun aktif olduğunda parçaları oyuncunun üstünde döndürme
+local function startMinigunLoop()
+    applyMinigunToParts(LocalPlayer.Character.HumanoidRootPart) -- İlk olarak oyuncunun üstüne topluyoruz
+    updateMinigunAroundPlayer() -- Parçaları oyuncunun üstünde döndürmeye başla
 end
 
 -- Basılı tutma mekanizması
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
-    if not minigunV2Active then return end
+    if not minigunActive then return end
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         local mouse = LocalPlayer:GetMouse()
         local target = mouse.Target
         if target then
             local humanoid = target.Parent:FindFirstChild("Humanoid")
             if humanoid and humanoid.Parent ~= LocalPlayer.Character then
-                minigunV2Target = humanoid.Parent:FindFirstChild("HumanoidRootPart")
-                if minigunV2Target then
+                minigunTarget = humanoid.Parent:FindFirstChild("HumanoidRootPart")
+                if minigunTarget then
                     isHolding = true
                     RedSelectionFrame.Visible = true
-                    applyMinigunV2ToParts(minigunV2Target) -- Hedef seçildiğinde parçaları hedefe yönlendir
-                    updateMinigunV2ToTarget(minigunV2Target) -- Hedefe doğru hareket ettir
-                    if renderConnectionV2 then
-                        renderConnectionV2:Disconnect()
+                    applyMinigunToParts(minigunTarget) -- Hedef seçildiğinde parçaları hedefe yönlendir
+                    updateMinigunToTarget(minigunTarget) -- Hedefe doğru hareket ettir
+                    if renderConnection then
+                        renderConnection:Disconnect()
                     end
-                    renderConnectionV2 = RunService.RenderStepped:Connect(updateRedSelectionFrame)
+                    renderConnection = RunService.RenderStepped:Connect(updateRedSelectionFrame)
                 end
             end
         end
@@ -1516,40 +1516,40 @@ end)
 
 UserInputService.InputEnded:Connect(function(input, gameProcessed)
     if gameProcessed then return end
-    if not minigunV2Active then return end
+    if not minigunActive then return end
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         isHolding = false
         RedSelectionFrame.Visible = false
-        minigunV2Target = nil
-        if renderConnectionV2 then
-            renderConnectionV2:Disconnect()
-            renderConnectionV2 = nil
+        minigunTarget = nil
+        if renderConnection then
+            renderConnection:Disconnect()
+            renderConnection = nil
         end
-        applyMinigunV2ToParts(LocalPlayer.Character.HumanoidRootPart) -- Hedef bırakıldığında parçaları oyuncunun üstüne geri getir
-        updateMinigunV2AroundPlayer() -- Tekrar oyuncunun üstünde dönmeye başla
+        applyMinigunToParts(LocalPlayer.Character.HumanoidRootPart) -- Hedef bırakıldığında parçaları oyuncunun üstüne geri getir
+        updateMinigunAroundPlayer() -- Tekrar oyuncunun üstünde dönmeye başla
     end
 end)
 
-MinigunV2Option.MouseButton1Click:Connect(function()
-    MinigunV2Gui.Visible = true
+MinigunOption.MouseButton1Click:Connect(function()
+    MinigunGui.Visible = true
     playSound("12221967")
 end)
 
 OnButton.MouseButton1Click:Connect(function()
-    minigunV2Active = true
-    startMinigunV2Loop()
+    minigunActive = true
+    startMinigunLoop()
     playSound("12221967")
 end)
 
 OffButton.MouseButton1Click:Connect(function()
-    minigunV2Active = false
-    stopMinigunV2()
-    MinigunV2Gui.Visible = false
+    minigunActive = false
+    stopMinigun()
+    MinigunGui.Visible = false
     playSound("12221967")
 end)
 
 local function updateSelectionFrame()
-    if targetPlayer and targetPlayer.Parent and minigunActive then
+    if targetPlayer and targetPlayer.Parent and rocketActive then
         local camera = Workspace.CurrentCamera
         if camera then
             local vector, onScreen = camera:WorldToScreenPoint(targetPlayer.Position)
@@ -1568,7 +1568,7 @@ end
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        if not minigunActive then return end
+        if not rocketActive then return end
         if LaunchButton.Visible or StopButton.Visible or ExitButton.Visible then return end
         local mouse = LocalPlayer:GetMouse()
         local target = mouse.Target
@@ -1586,7 +1586,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
                         renderConnection:Disconnect()
                     end
                     renderConnection = RunService.RenderStepped:Connect(function()
-                        if not targetPlayer or not minigunActive then
+                        if not targetPlayer or not rocketActive then
                             renderConnection:Disconnect()
                             renderConnection = nil
                             SelectionFrame.Visible = false
@@ -1607,7 +1607,7 @@ LaunchButton.MouseButton1Click:Connect(function()
         ThrowUntilKillButton.Visible = false
         StopButton.Visible = true
         applyPullToParts(targetPlayer)
-        spawn(startMinigunLoop)
+        spawn(startRocketLoop)
         playSound("12221967")
     end
 end)
