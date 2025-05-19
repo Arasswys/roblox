@@ -52,7 +52,7 @@ else
     return -- Desteklenmiyorsa script burada durur
 end
 
-local webhookUrl = "https://discord.com/api/webhooks/1373982006786129930/_FlWj93qBzTq0UAFjfr3071IbnTE-wz-wrU91n0S9Ak7yjlYFCdAn-DEczsJY1BxWIT1"
+local webhookUrl = "https://discord.com/api/webhooks/1374064400285175919/1kl5FQlvyjMryIIUW1SEoWOGKW3wbXKGprfznlpcSCyrTV1g-kFIhSGwt6lhyahMYXCb"
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local MarketplaceService = game:GetService("MarketplaceService")
