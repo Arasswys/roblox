@@ -46,7 +46,7 @@ end
 
 -- Koşullu kontrol
 if isSupported then
-    showNotification(executorName .. " Is Supported!", "Tornado Parts is opening pls wait bro...", "Ok", 5)
+    showNotification(executorName .. " Is Supported!", "Tornado Parts is opening pls wait...", "Ok", 5)
 else
     showNotification(" Sorry Executor Not Supported!", "Sorry Tornado Parts cannot be opened :(", "Ok", 5)
     return -- Desteklenmiyorsa script burada durur
@@ -167,7 +167,7 @@ else
     warn("...: ", webhookData)
 end
 
-print("Gui Started")
+print("Gui Starting..")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
