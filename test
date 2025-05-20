@@ -52,7 +52,7 @@ else
     return -- Desteklenmiyorsa script burada durur
 end
 
-print("Gui Starting Please Wait..")
+print("Tornado Parts İs Openning Please Wait...")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
